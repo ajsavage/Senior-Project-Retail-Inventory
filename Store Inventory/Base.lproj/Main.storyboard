@@ -77,17 +77,17 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zeu-v2-8AW" userLabel="Edit Pages View">
-                                <rect key="frame" x="20" y="344" width="255" height="246"/>
+                                <rect key="frame" x="30" y="344" width="250" height="246"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" image="EditProductPage" translatesAutoresizingMaskIntoConstraints="NO" id="hk3-rd-0Yh">
-                                        <rect key="frame" x="8" y="41" width="239" height="197"/>
-                                    </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Edit Product Pages" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="4rb-Wd-BlZ">
-                                        <rect key="frame" x="8" y="8" width="239" height="24"/>
+                                        <rect key="frame" x="8" y="8" width="234" height="24"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" image="EditProductPage" translatesAutoresizingMaskIntoConstraints="NO" id="hk3-rd-0Yh">
+                                        <rect key="frame" x="8" y="41" width="234" height="197"/>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <constraints>
@@ -101,13 +101,13 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NNI-l5-ZQo" userLabel="View Homepage View">
-                                <rect key="frame" x="316" y="344" width="254" height="246"/>
+                                <rect key="frame" x="321" y="344" width="249" height="246"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" image="ViewHomepage" translatesAutoresizingMaskIntoConstraints="NO" id="8PL-0r-14I">
-                                        <rect key="frame" x="8" y="64" width="238" height="174"/>
+                                        <rect key="frame" x="8" y="64" width="233" height="174"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="View Customer Homepage" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="ayH-DA-eeK">
-                                        <rect key="frame" x="8" y="8" width="238" height="48"/>
+                                        <rect key="frame" x="8" y="8" width="233" height="48"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
@@ -125,16 +125,16 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kKZ-nX-Kql" userLabel="Checkout View">
-                                <rect key="frame" x="316" y="74" width="254" height="247"/>
+                                <rect key="frame" x="321" y="74" width="249" height="247"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Checkout Products" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="ucd-ay-uAk">
-                                        <rect key="frame" x="8" y="8" width="238" height="24"/>
+                                        <rect key="frame" x="8" y="8" width="233" height="24"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" image="CheckOut" translatesAutoresizingMaskIntoConstraints="NO" id="r0i-Mp-1Fd">
-                                        <rect key="frame" x="8" y="41" width="238" height="198"/>
+                                        <rect key="frame" x="8" y="41" width="233" height="198"/>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -155,16 +155,16 @@
                                 </variation>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n3x-4q-k5z" userLabel="Scanin View">
-                                <rect key="frame" x="20" y="74" width="254" height="247"/>
+                                <rect key="frame" x="30" y="74" width="249" height="247"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scan In Products" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="ZPv-Pp-JNI">
-                                        <rect key="frame" x="8" y="8" width="238" height="24"/>
+                                        <rect key="frame" x="8" y="8" width="233" height="24"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="ScanIn" translatesAutoresizingMaskIntoConstraints="NO" id="qF4-hs-a02">
-                                        <rect key="frame" x="8" y="40" width="238" height="199"/>
+                                        <rect key="frame" x="8" y="40" width="233" height="199"/>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -191,20 +191,24 @@
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="NNI-l5-ZQo" secondAttribute="bottom" constant="85" id="6Zg-PD-oM4"/>
                             <constraint firstItem="NNI-l5-ZQo" firstAttribute="top" secondItem="zeu-v2-8AW" secondAttribute="top" id="9qH-p9-u4o"/>
                             <constraint firstItem="kKZ-nX-Kql" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="10" id="CDr-jg-DmV"/>
+                            <constraint firstItem="zeu-v2-8AW" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="10" id="Cqs-Ly-cyE"/>
                             <constraint firstItem="NNI-l5-ZQo" firstAttribute="top" secondItem="kKZ-nX-Kql" secondAttribute="bottom" constant="23" id="D8m-h1-shc"/>
                             <constraint firstItem="zeu-v2-8AW" firstAttribute="height" secondItem="n3x-4q-k5z" secondAttribute="height" id="EnD-48-sMM"/>
                             <constraint firstItem="NNI-l5-ZQo" firstAttribute="bottom" secondItem="zeu-v2-8AW" secondAttribute="bottom" id="F5c-Sx-zeH"/>
                             <constraint firstItem="kKZ-nX-Kql" firstAttribute="height" secondItem="n3x-4q-k5z" secondAttribute="height" id="KKm-tF-uVm"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="zeu-v2-8AW" secondAttribute="bottom" constant="10" id="LgC-M4-kIQ"/>
                             <constraint firstItem="zeu-v2-8AW" firstAttribute="centerX" secondItem="n3x-4q-k5z" secondAttribute="centerX" id="QEj-Ty-zqR"/>
+                            <constraint firstItem="n3x-4q-k5z" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="10" id="Qn2-Yc-67f"/>
                             <constraint firstItem="n3x-4q-k5z" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="10" id="SGo-yo-czH"/>
                             <constraint firstItem="kKZ-nX-Kql" firstAttribute="leading" secondItem="NNI-l5-ZQo" secondAttribute="leading" id="TRF-jf-fND"/>
                             <constraint firstItem="kKZ-nX-Kql" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="10" id="Tmr-Vp-FVX"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="NNI-l5-ZQo" secondAttribute="bottom" constant="10" id="U93-Nc-fW1"/>
                             <constraint firstItem="NNI-l5-ZQo" firstAttribute="height" secondItem="n3x-4q-k5z" secondAttribute="height" id="VG3-Zs-dgc"/>
                             <constraint firstItem="NNI-l5-ZQo" firstAttribute="centerY" secondItem="zeu-v2-8AW" secondAttribute="centerY" id="YQR-Ij-SY9"/>
+                            <constraint firstItem="zeu-v2-8AW" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="10" id="ZPv-tN-0Ia"/>
                             <constraint firstItem="kKZ-nX-Kql" firstAttribute="centerY" secondItem="n3x-4q-k5z" secondAttribute="centerY" id="dWc-mo-0a4"/>
                             <constraint firstItem="kKZ-nX-Kql" firstAttribute="width" secondItem="n3x-4q-k5z" secondAttribute="width" id="jmu-00-4FY"/>
+                            <constraint firstItem="n3x-4q-k5z" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="10" id="lkc-Ga-9cQ"/>
                             <constraint firstItem="n3x-4q-k5z" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="10" id="meL-WS-kws"/>
                             <constraint firstItem="zeu-v2-8AW" firstAttribute="leading" secondItem="n3x-4q-k5z" secondAttribute="leading" id="psJ-10-g0r"/>
                             <constraint firstItem="kKZ-nX-Kql" firstAttribute="trailing" secondItem="NNI-l5-ZQo" secondAttribute="trailing" id="rcy-37-0f3"/>
@@ -217,8 +221,13 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="Qn2-Yc-67f"/>
+                                <exclude reference="zcC-3R-QfN"/>
+                                <exclude reference="TRF-jf-fND"/>
                                 <exclude reference="vye-mY-DGe"/>
                                 <exclude reference="wan-du-0jo"/>
+                                <exclude reference="ZPv-tN-0Ia"/>
+                                <exclude reference="ve6-T3-dkk"/>
                                 <exclude reference="6Zg-PD-oM4"/>
                             </mask>
                         </variation>
