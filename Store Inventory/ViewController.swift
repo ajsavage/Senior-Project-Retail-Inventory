@@ -19,7 +19,12 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+}
 
-
+extension NSLayoutConstraint {
+    override public var description: String {
+        let id = identifier ?? ""
+        return "id: \(id), constant: \(constant)"
+    }
 }
 

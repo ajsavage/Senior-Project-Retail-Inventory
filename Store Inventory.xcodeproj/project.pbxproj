@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9961FC411DBE4504004AA9BE /* EditPagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9961FC401DBE4504004AA9BE /* EditPagesViewController.swift */; };
+		9961FC431DBE567C004AA9BE /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9961FC421DBE567C004AA9BE /* Constants.swift */; };
+		9961FC451DBEC10B004AA9BE /* ShowProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9961FC441DBEC10B004AA9BE /* ShowProductViewController.swift */; };
+		997746011DBA316200AB7279 /* ProductCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997746001DBA316200AB7279 /* ProductCollectionViewController.swift */; };
+		997746031DBA329B00AB7279 /* ProductCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997746021DBA329B00AB7279 /* ProductCollectionViewCell.swift */; };
 		99BC70331DAB00D9007AA01F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BC70321DAB00D9007AA01F /* AppDelegate.swift */; };
 		99BC70351DAB00D9007AA01F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BC70341DAB00D9007AA01F /* ViewController.swift */; };
 		99BC70381DAB00D9007AA01F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 99BC70361DAB00D9007AA01F /* Main.storyboard */; };
@@ -18,6 +23,7 @@
 		99BC70671DAB0580007AA01F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 99BC70661DAB0580007AA01F /* GoogleService-Info.plist */; };
 		99BC70681DAB0580007AA01F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 99BC70661DAB0580007AA01F /* GoogleService-Info.plist */; };
 		99BC70691DAB0580007AA01F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 99BC70661DAB0580007AA01F /* GoogleService-Info.plist */; };
+		99D2975B1DBA0562007AD05A /* Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D2975A1DBA0562007AD05A /* Details.swift */; };
 		99F278A01DAB65F600251DB2 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F2789F1DAB65F600251DB2 /* Product.swift */; };
 		99F278A21DAB9DD300251DB2 /* ProductTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F278A11DAB9DD300251DB2 /* ProductTableViewCell.swift */; };
 		99F278A41DABA22800251DB2 /* ProductTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F278A31DABA22800251DB2 /* ProductTableViewController.swift */; };
@@ -52,6 +58,11 @@
 		67D2F75B019E87E8E418907D /* Pods-Store Inventory.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Store Inventory.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Store Inventory/Pods-Store Inventory.debug.xcconfig"; sourceTree = "<group>"; };
 		86AAE3152C32188759557C85 /* Pods-Store InventoryTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Store InventoryTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Store InventoryTests/Pods-Store InventoryTests.release.xcconfig"; sourceTree = "<group>"; };
 		8E29FF7472A150F634E9ACF7 /* Pods_Store_InventoryTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Store_InventoryTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9961FC401DBE4504004AA9BE /* EditPagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPagesViewController.swift; sourceTree = "<group>"; };
+		9961FC421DBE567C004AA9BE /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		9961FC441DBEC10B004AA9BE /* ShowProductViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowProductViewController.swift; sourceTree = "<group>"; };
+		997746001DBA316200AB7279 /* ProductCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCollectionViewController.swift; sourceTree = "<group>"; };
+		997746021DBA329B00AB7279 /* ProductCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCollectionViewCell.swift; sourceTree = "<group>"; };
 		99BC702F1DAB00D9007AA01F /* Store Inventory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Store Inventory.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		99BC70321DAB00D9007AA01F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		99BC70341DAB00D9007AA01F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -67,6 +78,8 @@
 		99BC70541DAB00D9007AA01F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		99BC70601DAB0158007AA01F /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		99BC70661DAB0580007AA01F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		99D297461DB9F1C7007AD05A /* Firebase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Firebase.h; path = Pods/Firebase/Core/Sources/Firebase.h; sourceTree = "<group>"; };
+		99D2975A1DBA0562007AD05A /* Details.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Details.swift; sourceTree = "<group>"; };
 		99F2789F1DAB65F600251DB2 /* Product.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		99F278A11DAB9DD300251DB2 /* ProductTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductTableViewCell.swift; sourceTree = "<group>"; };
 		99F278A31DABA22800251DB2 /* ProductTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductTableViewController.swift; sourceTree = "<group>"; };
@@ -122,6 +135,7 @@
 		72B99E8F35D97281D71D4E4A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				99D297461DB9F1C7007AD05A /* Firebase.h */,
 				EA81C73510F0DA6F585C3BCB /* Pods_Store_Inventory.framework */,
 				8E29FF7472A150F634E9ACF7 /* Pods_Store_InventoryTests.framework */,
 				007F7B23005C698B44C43CF8 /* Pods_Store_InventoryUITests.framework */,
@@ -157,8 +171,12 @@
 			isa = PBXGroup;
 			children = (
 				99BC70361DAB00D9007AA01F /* Main.storyboard */,
+				9961FC441DBEC10B004AA9BE /* ShowProductViewController.swift */,
+				99D2975A1DBA0562007AD05A /* Details.swift */,
 				99F2789F1DAB65F600251DB2 /* Product.swift */,
 				99FFDA901DAECF7700634ECD /* SettingsViewController.swift */,
+				9961FC401DBE4504004AA9BE /* EditPagesViewController.swift */,
+				9961FC421DBE567C004AA9BE /* Constants.swift */,
 				99FFDA8F1DAECDC500634ECD /* Customer Views */,
 				99BC70391DAB00D9007AA01F /* Assets.xcassets */,
 				99BC70321DAB00D9007AA01F /* AppDelegate.swift */,
@@ -190,7 +208,9 @@
 		99FFDA8F1DAECDC500634ECD /* Customer Views */ = {
 			isa = PBXGroup;
 			children = (
+				997746021DBA329B00AB7279 /* ProductCollectionViewCell.swift */,
 				99F278A51DABDF0300251DB2 /* DetailsViewController.swift */,
+				997746001DBA316200AB7279 /* ProductCollectionViewController.swift */,
 				99F278A31DABA22800251DB2 /* ProductTableViewController.swift */,
 				99F278A11DAB9DD300251DB2 /* ProductTableViewCell.swift */,
 			);
@@ -481,11 +501,17 @@
 			files = (
 				99BC70351DAB00D9007AA01F /* ViewController.swift in Sources */,
 				99F278A21DAB9DD300251DB2 /* ProductTableViewCell.swift in Sources */,
+				9961FC451DBEC10B004AA9BE /* ShowProductViewController.swift in Sources */,
+				997746031DBA329B00AB7279 /* ProductCollectionViewCell.swift in Sources */,
 				99FFDA911DAECF7700634ECD /* SettingsViewController.swift in Sources */,
 				99F278A01DAB65F600251DB2 /* Product.swift in Sources */,
+				9961FC411DBE4504004AA9BE /* EditPagesViewController.swift in Sources */,
+				997746011DBA316200AB7279 /* ProductCollectionViewController.swift in Sources */,
 				99BC70331DAB00D9007AA01F /* AppDelegate.swift in Sources */,
+				99D2975B1DBA0562007AD05A /* Details.swift in Sources */,
 				99F278A41DABA22800251DB2 /* ProductTableViewController.swift in Sources */,
 				99F278A61DABDF0300251DB2 /* DetailsViewController.swift in Sources */,
+				9961FC431DBE567C004AA9BE /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

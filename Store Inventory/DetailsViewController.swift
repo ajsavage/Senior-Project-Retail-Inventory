@@ -9,44 +9,72 @@
 import UIKit
 import Firebase
 
-class DetailsViewController: UIViewController {
+class DetailsViewController: ShowProductViewController {
+    // Product Detail View Elements
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var priceLabel: UILabel!
-    @IBOutlet var imageLabel: UIImageView!
     @IBOutlet var descriptionLabel: UITextView!
-    @IBOutlet var colorLabel: UITextField!
-    @IBOutlet var sizeLabel: UITextField!
-    @IBOutlet var inStockLabel: UILabel!
-    
     @IBOutlet var favoritesButton: UIButton!
-    var currentProduct: Product!
+    @IBOutlet var inStockLabel: UILabel!
+    @IBOutlet var imageLabel: UIImageView!
+    
+    // Color Dropdown Elements
+    @IBOutlet var chooseColorButton: UIButton!
+    @IBOutlet var chooseColorLabel: UILabel!
+    
+    // Action when a user touches inside the 'Choose Color' text
+    @IBAction func colorMenuSelected(sender: AnyObject) {
+        let sheet = createColorMenu
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad) {
+            sheet.showFromRect(sender.frame, inView: self.view, animated: true)
+        } else {
+            sheet.showInView(self.view)
+        }
+    }
+    
+    // Size Dropdown Elements
+    @IBOutlet var chooseSizeLabel: UILabel!
+    @IBOutlet var chooseSizeButton: UIButton!
+    
+    // Action when a user touches inside the 'Choose Size' text
+    @IBAction func sizeMenuSelected(sender: AnyObject) {
+        let sheet = createSizeMenu
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad) {
+            sheet.showFromRect(sender.frame, inView: self.view, animated: true)
+        } else {
+            sheet.showInView(self.view)
+        }
+    }
+    
+    // Sets the choose size button title to the selected size on the action sheet
+    func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
+        if (actionSheet.tag == Constants.Sizes.menuTag) {
+            actionSheetButtonClicked(actionSheet, buttonIndex: buttonIndex, view: chooseSizeLabel)
+            inStockLabel.text = calculateStock
+        }
+        else if (actionSheet.tag == Constants.Colors.menuTag) {
+            actionSheetButtonClicked(actionSheet, buttonIndex: buttonIndex, view: chooseColorLabel)
+        }
+    }
+    
+    // Called when the product's details are finished loading from the database
+    func updateWithLoadedData() {
+        // Sets the view to display the current product's details
+        titleLabel.text = currentProduct.title as String
+        priceLabel.text = currentProduct.strPrice
+        imageLabel.image = currentProduct.image
+        self.descriptionLabel.text = self.currentProduct.productDescription as String
+        
+        indicator!.removeFromSuperview()
+        inStockLabel.text = calculateStock
+    }
     
     override func viewWillAppear(animated: Bool) {
-//USE this?? also need to reload after firebase thing and do in background thread thingy
-        if (!currentProduct.hasDetailsLoaded) {
-            currentProduct.loadDetails()
-        }
+        super.viewWillAppear(animated)
         
-        titleLabel.text = currentProduct.title as String
-        priceLabel.text = "$" + currentProduct.strPrice
-        
-        descriptionLabel.text = currentProduct.productDescription as String
-        imageLabel.image = currentProduct.image
-        
-        let stock = 3
-        inStockLabel.text = "In Stock: " + String(stock)
-        //favoritesButton
+        showLoadingSymbol(titleLabel)
+        self.currentProduct.loadInformation(false, callback: updateWithLoadedData)
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 }

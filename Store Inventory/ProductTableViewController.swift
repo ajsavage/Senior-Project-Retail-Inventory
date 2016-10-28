@@ -9,44 +9,57 @@
 import UIKit
 import Firebase
 
-// MULTIPLE SECTIONS FOR CLOTHING TYPES
-// Make sure to not show products with negative prices
-// only load products when row method thing called
-
 class ProductTableViewController: UITableViewController {
 
     var products = [Product]()
-    var dataRef: FIRDatabaseReference!
     let detailSegueIdentifier = "ProductDetailsSegue"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.clearsSelectionOnViewWillAppear = false
+//        self.clearsSelectionOnViewWillAppear = false
         
-        loadProductsFromDatabase()
-    }
-    
-    func loadProductsFromDatabase() {
-        dataRef = FIRDatabase.database().reference().child("inventory")
+        let dataRef = FIRDatabase.database().reference().child("inventory")
         var newProduct: Product!
         
         dataRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
- 
+            
             if !snapshot.exists() { return }
             
             for child in snapshot.children {
-                let converted = child as! FIRDataSnapshot
-                newProduct = Product(data: converted, ref: self.dataRef)
-                
-                self.products.append(newProduct)
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                    let converted = child as! FIRDataSnapshot
+                    newProduct = Product(data: converted, ref: dataRef)
+                    
+                    if (newProduct.price > 0) {
+                        self.products.append(newProduct)
+                        self.loadProductImageFromStorage(newProduct)
+                    }
+                }
             }
-       
         })
+    }
+    
+    func loadProductImageFromStorage(product: Product) {
+        let storage = FIRStorage.storage().referenceForURL("gs://storeinventoryapp.appspot.com")
+        let newImage = storage.child(product.productID as String + ".jpeg")
+        
+        newImage.dataWithMaxSize(1 * 1024 * 1024) { (data, error) -> Void in
+            dispatch_async(dispatch_get_main_queue()) {
+                if (error != nil) {
+                    product.setImage(UIImage(named: "DefaultImage")!)
+                }
+                else {
+                    product.setImage(UIImage(data: data!)!)
+                }
+            
+                self.tableView.reloadData()
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+// NEEDS CODE - release all product's details OR just all not current viewed products?
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -63,7 +76,7 @@ class ProductTableViewController: UITableViewController {
         let currentProduct = products[indexPath.row]
         
         cell.productTitle.text = currentProduct.title as String
-        cell.priceLabel.text = "$" + currentProduct.strPrice
+        cell.priceLabel.text = currentProduct.strPrice
         cell.productImage.image = currentProduct.image
         
         return cell
@@ -77,33 +90,6 @@ class ProductTableViewController: UITableViewController {
             destination.currentProduct = products[IDIndex]
         }
     }
- 
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
 
     /*
     // Override to support conditional rearranging of the table view.
@@ -112,5 +98,4 @@ class ProductTableViewController: UITableViewController {
         return true
     }
     */
-
 }
