@@ -76,6 +76,25 @@ class Product: NSObject {
         }
     }
     
+    // Saves the new image to this product's location in storage
+    func saveImage(image: UIImage, callback: () -> ()) {
+        /*
+         let data: NSData = UIImagePNGRepresentation(image)!
+        let storage = FIRStorage.storage().referenceForURL("gs://storeinventoryapp.appspot.com")
+        let newImage = storage.child(_id as String + ".jpeg")
+        
+        newImage.putData(data, metadata: nil) { metadata, error in
+            if (error != nil) {
+                print("Saving Product Image failed!")
+            }
+            
+            callback()
+        }
+        */
+        
+        callback()
+    }
+    
     func setImage(newImage: UIImage) {
         _image = newImage
     }

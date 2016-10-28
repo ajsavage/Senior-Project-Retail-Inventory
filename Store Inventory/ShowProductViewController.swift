@@ -20,7 +20,7 @@ class ShowProductViewController: UIViewController, UIActionSheetDelegate {
     // Loading Animation
     var indicator: UIActivityIndicatorView? = nil
     
-    var createColorMenu: UIActionSheet {
+    func createColorMenu(hasAddButton: Bool) -> UIActionSheet {
         let sheet: UIActionSheet = UIActionSheet(title: "Choose Color",
                                                  delegate: self,
                                                  cancelButtonTitle: nil,
@@ -28,6 +28,12 @@ class ShowProductViewController: UIViewController, UIActionSheetDelegate {
                                                  otherButtonTitles: "All")
         sheet.tag = Constants.Colors.menuTag
         cancelColorIndex = 1 // All and Cancel buttons
+        
+        // Add New Color button
+        if (hasAddButton) {
+            sheet.addButtonWithTitle("✚ Add New Color")
+            cancelColorIndex += 1
+        }
         
         for newColor in currentProduct.colors {
             sheet.addButtonWithTitle(newColor as String)
@@ -41,7 +47,7 @@ class ShowProductViewController: UIViewController, UIActionSheetDelegate {
     // Create and add the Cancel Button
     func colorCancelButton(sheet: UIActionSheet) {
         sheet.addButtonWithTitle("Cancel")
-        sheet.dismissWithClickedButtonIndex(cancelColorIndex, animated: true)
+        sheet.cancelButtonIndex = cancelColorIndex
     }
     
     var createSizeMenu: UIActionSheet {
@@ -59,7 +65,7 @@ class ShowProductViewController: UIViewController, UIActionSheetDelegate {
         
         // Cancel button
         sheet.addButtonWithTitle("Cancel")
-        sheet.dismissWithClickedButtonIndex(cancelSizeIndex, animated: true)
+        sheet.cancelButtonIndex = cancelSizeIndex
         
         return sheet
     }
@@ -77,23 +83,14 @@ class ShowProductViewController: UIViewController, UIActionSheetDelegate {
         
         // Cancel button
         sheet.addButtonWithTitle("Cancel")
-        sheet.dismissWithClickedButtonIndex(Constants.Types.Names.count, animated: true)
-    
+        sheet.cancelButtonIndex = Constants.Types.Names.count
+        
         return sheet
     }
     
     // Adds a new size button to the action sheet if there is atleast one
     // product available in that size
     func addSizeButton(title: String, index: Int, actionSheet: UIActionSheet) {
-      /*  if (self.currentProduct.sizes[index].integerValue > 0) {
-            let newButton = UIButton()
-            newButton.titleLabel?.text = title
-            newButton.titleLabel?.tag = index
-            actionSheet.addSubview(newButton)
-            cancelSizeIndex += 1
-        }
-        */
-        
         actionSheet.addButtonWithTitle(title)
         cancelSizeIndex += 1
     }
@@ -102,9 +99,8 @@ class ShowProductViewController: UIViewController, UIActionSheetDelegate {
         // Size ActionSheet
         if (actionSheet.tag == Constants.Sizes.menuTag) {
             if (buttonIndex != cancelSizeIndex) {
-                (view as! UILabel).text = actionSheet.buttonTitleAtIndex(buttonIndex)
-                
                 sizeIndex = buttonIndex - 1
+                (view as! UILabel).text = actionSheet.buttonTitleAtIndex(buttonIndex)
             }
         }
         // Color ActionSheet
@@ -116,7 +112,7 @@ class ShowProductViewController: UIViewController, UIActionSheetDelegate {
         // Type ActionSheet
         else if (actionSheet.tag == Constants.Types.menuTag) {
             if (buttonIndex != Constants.Types.Names.count) {
-                (view as! UIButton).titleLabel!.text = actionSheet.buttonTitleAtIndex(buttonIndex)
+                (view as! UIButton).setTitle(actionSheet.buttonTitleAtIndex(buttonIndex), forState: .Normal)
             }
         }
     }

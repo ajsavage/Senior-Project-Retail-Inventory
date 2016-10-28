@@ -24,7 +24,7 @@ class DetailsViewController: ShowProductViewController {
     
     // Action when a user touches inside the 'Choose Color' text
     @IBAction func colorMenuSelected(sender: AnyObject) {
-        let sheet = createColorMenu
+        let sheet = createColorMenu(false)
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad) {
             sheet.showFromRect(sender.frame, inView: self.view, animated: true)

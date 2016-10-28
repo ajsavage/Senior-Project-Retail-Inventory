@@ -9,19 +9,22 @@
 import UIKit
 import Firebase
 
-class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, UITextFieldDelegate {
+class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, UITextFieldDelegate, UITextViewDelegate {
     // Product Detail View Elements
     @IBOutlet var titleLabel: UITextView!
     @IBOutlet var priceLabel: UITextField!
     @IBOutlet var descriptionLabel: UITextView!
     @IBOutlet var inStockLabel: UILabel!
     @IBOutlet var imageLabel: UIImageView!
-    @IBOutlet var searchField: UITextField!
     
-    // Temporary size and color arrays
+    @IBOutlet var overallScrollView: UIScrollView!
+    @IBOutlet var searchField: UITextField!
+    @IBOutlet var descriptionScrollView: UIScrollView!
+    @IBOutlet var saveButton: UIButton!
+    
+    // Temporary colors array
     var newColors = [NSString]()
-    var newSizes = [NSNumber]()
-
+    
     private func showErrorAlert(message: String) {
         let errorAlert = UIAlertView(title: "Invalid Search", message: message, delegate: self, cancelButtonTitle: "OK")
         errorAlert.tag = -1
@@ -32,9 +35,8 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
         if (sender.text == nil || sender.text == "") {
             showErrorAlert("Please enter a product ID to display.")
         }
-        
-        if (sender.text!.characters.count != Constants.ProductID.Length) {
-            showErrorAlert("Not a valid Product ID - Product IDs must be exactly " + String(Constants.ProductID.Length) + " characters long.")
+        else if (sender.text!.characters.count != Constants.ProductID.Length) {
+            showErrorAlert("Not a valid Product ID - Product IDs must be exactly \(Constants.ProductID.Length) characters long.")
         }
         else {
             showLoadingSymbol(searchField)
@@ -57,23 +59,39 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
             })
         }
     }
- 
-    // Called when a text field is highlighted and the Return key is pushed
+    
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        if (textView.tag != Constants.Description.fieldTag) {
+            // Return key was pressed
+            if text == "\n" {
+                textView.resignFirstResponder()
+                textView.endEditing(true)
+                
+                return false
+            }
+        }
+        return true
+    }
+    
+    // Called when a textView is selected for editing
+    func textViewDidBeginEditing(textView: UITextView) {
+        if (textView.tag == Constants.Description.fieldTag) {
+            animateDescriptionScrollView(descriptionScrollView, distanceLength: -200, up: true)
+        }
+    }
+    
+    // Called when a textView is being edited and the Return key is pushed
+    func textViewDidEndEditing(textView: UITextView) {
+        if (textView.tag == Constants.Description.fieldTag) {
+            animateDescriptionScrollView(descriptionScrollView, distanceLength: -200, up: false)
+        }
+    }
+    
+    // Called when a textField is highlighted and the Return key is pushed
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         textField.endEditing(true)
       
-    //    NOT WORKING
- /*     this Method
-        keyboard blocks description when editing
-        X - choose type not showing on button
-        views should be hidden before a search... with a larger middle preselected search field??
-        add image saving
-        X - add new color menu has wrong titles?
-        how to save a new size.. show size numbers in size menu
-        remove 0 or less sizes from menu in other view
-        test all adding/saving features
-   */
         return true
     }
     
@@ -85,6 +103,8 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
         imageLabel.image = currentProduct.image
         self.descriptionLabel.text = self.currentProduct.productDescription as String
         
+        overallScrollView.hidden = false
+        view.backgroundColor = UIColor.whiteColor()
         removeLoadingSymbol(searchField)
         searchField.text = nil
         
@@ -92,13 +112,35 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
     }
  
     @IBAction func saveButtonClicked(sender: AnyObject) {
+        showLoadingSymbol(overallScrollView)
+        
         currentProduct.selfRef.child("Title").setValue(titleLabel.text)
         currentProduct.selfRef.child("Price").setValue(priceLabel.text)
         currentProduct.selfRef.child("Description").setValue(descriptionLabel.text)
-        currentProduct.selfRef.child("Type").setValue(chooseTypeButton?.titleLabel?.text)
-        // IMAGE
+        
+        if (chooseTypeButton.currentTitle != "Choose Type") {
+            currentProduct.selfRef.child("Type").setValue(chooseTypeButton?.currentTitle)
+        }
+        
+        // Save Colors
+        var index = 0
+        while (index < newColors.count) {
+            let color = newColors[index]
+            let realColor = newColors[index + 1]
+            
+            index += 2
+            currentProduct.selfRef.child("Colors/\(color)").setValue(realColor)
+        }
+        
+        // Save Image
+        currentProduct.saveImage(imageLabel.image!, callback: doneSavingProduct)
         
         navigationController?.popViewControllerAnimated(true)
+    }
+    
+    // Saving Button Callback after Image is uploaded to storage
+    func doneSavingProduct() {
+        removeLoadingSymbol(overallScrollView)
     }
     
     @IBAction func cancelButtonClicked(sender: AnyObject) {
@@ -124,7 +166,7 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
     
     // Action when a user touches inside the 'Choose Color' text
     @IBAction func colorButtonClicked(sender: AnyObject) {
-        let sheet = createColorMenu
+        let sheet = createColorMenu(true)
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad) {
             sheet.showFromRect(sender.frame, inView: self.view, animated: true)
@@ -134,13 +176,16 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
     }
     
     override func colorCancelButton(sheet: UIActionSheet) {
-        // Add New Color button
-        sheet.addButtonWithTitle("✚ Add new Color")
-        cancelColorIndex += 1
+        var index = 1
+        while (index < newColors.count) {
+            sheet.addButtonWithTitle(newColors[index] as String)
+            index += 2
+            cancelColorIndex += 1
+        }
         
-        // Cance Button
+        // Cancel Button
         sheet.addButtonWithTitle("Cancel")
-        sheet.dismissWithClickedButtonIndex(cancelColorIndex, animated: true)
+        sheet.cancelButtonIndex = cancelColorIndex
     }
     
     // Size Dropdown Elements
@@ -160,20 +205,27 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
     
     // Adds a new size button to the action sheet
     override func addSizeButton(title: String, index: Int, actionSheet: UIActionSheet) {
-        actionSheet.addButtonWithTitle(title + " - " + String(currentProduct.sizes[index]))
+        actionSheet.addButtonWithTitle(title + " - \(currentProduct.sizes[index])")
         cancelSizeIndex += 1
+    }
+    
+    
+    private func checkIndex(index: Int, alertView: UIAlertView) -> Bool {
+        let isValidColor = (alertView.textFieldAtIndex(index) != nil &&
+                            alertView.textFieldAtIndex(index)!.text != nil &&
+                            alertView.textFieldAtIndex(index)!.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) != "")
+        return isValidColor
     }
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if (alertView.tag == Constants.Colors.menuTag) {
-            if (alertView.textFieldAtIndex(1) != nil && alertView.textFieldAtIndex(1)!.text != nil
-                && alertView.textFieldAtIndex(0) != nil && alertView.textFieldAtIndex(0)!.text != nil) {
+            if (checkIndex(0, alertView: alertView) && checkIndex(1, alertView: alertView)) {
                 let color: String = alertView.textFieldAtIndex(1)!.text!
                 let realColor: String = alertView.textFieldAtIndex(0)!.text!
                 
-                
                 if (color.characters.count > 0 && realColor.characters.count > 0) {
-                    currentProduct.selfRef.child("Colors").setValue([color: realColor])
+                    newColors.append(color.capitalizedString)
+                    newColors.append(realColor.capitalizedString)
                 }
             }
         }
@@ -184,6 +236,7 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
         errorAlert.title = "Enter New Color"
         errorAlert.alertViewStyle = UIAlertViewStyle.LoginAndPasswordInput
         errorAlert.tag = Constants.Colors.menuTag
+        errorAlert.delegate = self
         
         errorAlert.addButtonWithTitle("OK")
         errorAlert.addButtonWithTitle("Cancel")
@@ -191,20 +244,29 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
         errorAlert.dismissWithClickedButtonIndex(1, animated: true)
         
         errorAlert.textFieldAtIndex(0)?.placeholder = "New Color"
-        errorAlert.textFieldAtIndex(1)?.placeholder = "Overview Color i.e. wine == red"
+        errorAlert.textFieldAtIndex(1)?.placeholder = "Overview Color i.e. Wine == Red"
+        errorAlert.textFieldAtIndex(1)?.secureTextEntry = false
         
         errorAlert.show()
     }
-    
+
     func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
         // If is the size action sheet
         if (actionSheet.tag == Constants.Sizes.menuTag) {
-            actionSheetButtonClicked(actionSheet, buttonIndex: buttonIndex, view: chooseSizeLabel)
+            // All button
+            if (buttonIndex == 0) {
+                chooseSizeLabel.text = actionSheet.buttonTitleAtIndex(buttonIndex)
+            }
+            else if (buttonIndex != cancelSizeIndex) {
+                sizeIndex = buttonIndex - 1
+                chooseSizeLabel.text = Constants.Sizes.Names[buttonIndex - 1]
+            }
+            
             inStockLabel.text = calculateStock
         }
         else if (actionSheet.tag == Constants.Colors.menuTag) {
             // Add button
-            if (buttonIndex == cancelColorIndex - 1) {
+            if (buttonIndex == 1) {
                 createNewColorView()
             }
             else {
@@ -219,6 +281,14 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Setup starting view
+        overallScrollView.hidden = true
+        view.backgroundColor = UIColor.blackColor()
+        searchField.becomeFirstResponder()
+        
+        // Set description textView tag
+        descriptionLabel.tag = Constants.Description.fieldTag
+        
         // Add rounded border to title textview
         titleLabel.layer.borderColor = UIColor.lightGrayColor().CGColor
         titleLabel.layer.cornerRadius = 5
@@ -228,6 +298,19 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
         let dismissTap = UITapGestureRecognizer(target: self, action: #selector(EditPagesViewController.dismissKeyboard))
         dismissTap.cancelsTouchesInView = false
         view.addGestureRecognizer(dismissTap)
+    }
+    
+    // Helper to move description text field up when clicked and
+    // covered by the keyboard
+    func animateDescriptionScrollView(view: UIScrollView, distanceLength: Int, up: Bool) {
+        let duration = 0.3
+        let distance = CGFloat(distanceLength) * (up ? 1 : -1)
+        
+        UIView.beginAnimations("animateDescriptionScrollView", context: nil)
+        UIView.setAnimationBeginsFromCurrentState(true)
+        UIView.setAnimationDuration(duration)
+        self.view.frame = CGRectOffset(self.view.frame, 0, distance)
+        UIView.commitAnimations()
     }
     
     // For Keyboard dismissal

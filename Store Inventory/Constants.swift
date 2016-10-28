@@ -33,4 +33,8 @@ class Constants: NSObject {
     struct Colors {
         static let menuTag = 2
     }
+    
+    struct Description {
+        static let fieldTag = 5
+    }
 }
