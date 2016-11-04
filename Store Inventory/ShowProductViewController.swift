@@ -10,12 +10,13 @@ import UIKit
 
 class ShowProductViewController: UIViewController, UIActionSheetDelegate {
     // Product to display details about
-    var currentProduct: Product!
+    var currentProduct: Product! = nil
     
     // Sizes index for calculating the number in stock
     var sizeIndex = -1
     var cancelColorIndex = 0
     var cancelSizeIndex = 0
+    var typeName = ""
     
     // Loading Animation
     var indicator: UIActivityIndicatorView? = nil
@@ -95,24 +96,25 @@ class ShowProductViewController: UIViewController, UIActionSheetDelegate {
         cancelSizeIndex += 1
     }
     
-    func actionSheetButtonClicked(actionSheet: UIActionSheet, buttonIndex: Int, view: UIView) {
+    func actionSheetButtonClicked(actionSheet: UIActionSheet, buttonIndex: Int, view: UILabel) {
         // Size ActionSheet
         if (actionSheet.tag == Constants.Sizes.menuTag) {
             if (buttonIndex != cancelSizeIndex) {
                 sizeIndex = buttonIndex - 1
-                (view as! UILabel).text = actionSheet.buttonTitleAtIndex(buttonIndex)
+                view.text = actionSheet.buttonTitleAtIndex(buttonIndex)
             }
         }
         // Color ActionSheet
         else if (actionSheet.tag == Constants.Colors.menuTag) {
             if (buttonIndex != cancelColorIndex) {
-                (view as! UILabel).text = actionSheet.buttonTitleAtIndex(buttonIndex)
+                view.text = actionSheet.buttonTitleAtIndex(buttonIndex)
             }
         }
         // Type ActionSheet
         else if (actionSheet.tag == Constants.Types.menuTag) {
             if (buttonIndex != Constants.Types.Names.count) {
-                (view as! UIButton).setTitle(actionSheet.buttonTitleAtIndex(buttonIndex), forState: .Normal)
+                typeName = actionSheet.buttonTitleAtIndex(buttonIndex)!
+                view.text = "Type: \(typeName)"
             }
         }
     }

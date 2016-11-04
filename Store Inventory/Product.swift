@@ -78,8 +78,7 @@ class Product: NSObject {
     
     // Saves the new image to this product's location in storage
     func saveImage(image: UIImage, callback: () -> ()) {
-        /*
-         let data: NSData = UIImagePNGRepresentation(image)!
+        let data: NSData = UIImageJPEGRepresentation(image, 0)!
         let storage = FIRStorage.storage().referenceForURL("gs://storeinventoryapp.appspot.com")
         let newImage = storage.child(_id as String + ".jpeg")
         
@@ -90,7 +89,6 @@ class Product: NSObject {
             
             callback()
         }
-        */
         
         callback()
     }
@@ -101,7 +99,7 @@ class Product: NSObject {
     
     // Returns the price as a String in $X.XX format
     var strPrice: String {
-        return "$" + (NSString(format: "%.2f", _price) as String)
+        return "$" + (NSString(format: "%.02f", _price) as String)
     }
     
     var selfRef: FIRDatabaseReference! {

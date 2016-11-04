@@ -1,20 +1,23 @@
 //
-//  EditPagesViewController.swift
+//  ScanInViewController.swift
 //  Store Inventory
 //
-//  Created by Andrea Savage on 10/24/16.
+//  Created by Andrea Savage on 10/28/16.
 //  Copyright © 2016 Andrea Savage. All rights reserved.
 //
 
 import UIKit
 import Firebase
 
-class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, UITextFieldDelegate, UITextViewDelegate {
+class ScanInViewController: ShowProductViewController, barcodeScannerCommunicator, UIAlertViewDelegate, UITextFieldDelegate, UITextViewDelegate {
+    @IBOutlet var barcodeLabel: UILabel!
+    @IBOutlet var scanInButton: UIButton!
+    @IBOutlet var sizeReportView: UIView!
+    
     // Product Viewing Elements
     @IBOutlet var titleLabel: UITextView!
     @IBOutlet var priceLabel: UITextField!
     @IBOutlet var descriptionLabel: UITextView!
-    @IBOutlet var inStockLabel: UILabel!
     @IBOutlet var imageLabel: UIImageView!
     
     @IBOutlet var overallScrollView: UIScrollView!
@@ -22,11 +25,31 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
     @IBOutlet var descriptionScrollView: UIScrollView!
     @IBOutlet var saveButton: UIButton!
     
+    var barcode: String?
+    
     // Temporary colors array
     var newColors = [NSString]()
     
     // If the image was updated
     var imageChanged = false
+    
+    @IBAction func scanButtonClicked(sender: UIButton) {
+        let scanner = BarcodeScanner()
+        scanner.delegate = self
+        
+        // Start barcode scanner
+        self.presentViewController(scanner, animated: true, completion: nil)
+    }
+
+    func backFromBarcodeScanner(barcode: String?) {
+        self.barcode = barcode
+        
+        if (barcode == nil) {
+            self.barcode = "Could not find barcode (I think)"
+        }
+        
+        barcodeLabel.text = self.barcode
+    }
     
     private func showErrorAlert(message: String) {
         let errorAlert = UIAlertView(title: "Invalid Search", message: message, delegate: self, cancelButtonTitle: "OK")
@@ -94,7 +117,7 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         textField.endEditing(true)
-      
+        
         return true
     }
     
@@ -112,16 +135,14 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
         view.backgroundColor = UIColor.whiteColor()
         removeLoadingSymbol(searchField)
         searchField.text = nil
-        
-        inStockLabel.text = calculateStock
     }
- 
+    
     @IBAction func saveButtonClicked(sender: AnyObject) {
         showLoadingSymbol(overallScrollView)
         
         currentProduct.selfRef.child("Title").setValue(titleLabel.text)
         currentProduct.selfRef.child("Description").setValue(descriptionLabel.text)
-
+        
         let price = Float(priceLabel.text!)
         if (price != nil) {
             currentProduct.selfRef.child("Price").setValue(price)
@@ -161,7 +182,7 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
     // Type Dropdown Elements
     @IBOutlet var chooseTypeButton: UIButton!
     @IBOutlet var chooseTypeLabel: UILabel!
-   
+    
     @IBAction func typeButtonClicked(sender: AnyObject) {
         let sheet = createTypeMenu
         
@@ -200,32 +221,10 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
         sheet.cancelButtonIndex = cancelColorIndex
     }
     
-    // Size Dropdown Elements
-    @IBOutlet var chooseSizeLabel: UILabel!
-    @IBOutlet var chooseSizeButton: UIButton!
-  
-    // Action when a user touches inside the 'Choose Size' text
-    @IBAction func sizeButtonClicked(sender: AnyObject) {
-        let sheet = createSizeMenu
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad) {
-            sheet.showFromRect(sender.frame, inView: self.view, animated: true)
-        } else {
-            sheet.showInView(self.view)
-        }
-    }
-    
-    // Adds a new size button to the action sheet
-    override func addSizeButton(title: String, index: Int, actionSheet: UIActionSheet) {
-        actionSheet.addButtonWithTitle(title + " - \(currentProduct.sizes[index])")
-        cancelSizeIndex += 1
-    }
-    
-    
     private func checkIndex(index: Int, alertView: UIAlertView) -> Bool {
         let isValidColor = (alertView.textFieldAtIndex(index) != nil &&
-                            alertView.textFieldAtIndex(index)!.text != nil &&
-                            alertView.textFieldAtIndex(index)!.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) != "")
+            alertView.textFieldAtIndex(index)!.text != nil &&
+            alertView.textFieldAtIndex(index)!.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) != "")
         return isValidColor
     }
     
@@ -261,22 +260,9 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
         
         errorAlert.show()
     }
-
+    
     func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
-        // If is the size action sheet
-        if (actionSheet.tag == Constants.Sizes.menuTag) {
-            // All button
-            if (buttonIndex == 0) {
-                chooseSizeLabel.text = actionSheet.buttonTitleAtIndex(buttonIndex)
-            }
-            else if (buttonIndex != cancelSizeIndex) {
-                sizeIndex = buttonIndex - 1
-                chooseSizeLabel.text = Constants.Sizes.Names[buttonIndex - 1]
-            }
-            
-            inStockLabel.text = calculateStock
-        }
-        else if (actionSheet.tag == Constants.Colors.menuTag) {
+        if (actionSheet.tag == Constants.Colors.menuTag) {
             // Add buttonup
             if (buttonIndex == 1) {
                 createNewColorView()
@@ -292,17 +278,6 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Setup starting view
-        if (currentProduct == nil) {
-            overallScrollView.hidden = true
-            view.backgroundColor = UIColor.blackColor()
-            searchField.becomeFirstResponder()
-        }
-        else {
-            showLoadingSymbol(searchField)
-            self.currentProduct.loadInformation(true, callback: self.updateWithLoadedData)
-        }
         
         // Set description textView tag
         descriptionLabel.tag = Constants.Description.fieldTag
