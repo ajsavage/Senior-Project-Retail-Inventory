@@ -22,9 +22,23 @@ class DetailsViewController: ShowProductViewController {
     @IBOutlet var chooseColorButton: UIButton!
     @IBOutlet var chooseColorLabel: UILabel!
     
+    // NSUserDefaults
+    let prefs = NSUserDefaults.standardUserDefaults()
+    
+    // Action when a user touches inside the Add to Favorites button
+    @IBAction func favoritesButtonClicked(sender: UIButton) {
+        if (!prefs.boolForKey("ISGUESTUSER")) {
+            FIRDatabase.database().reference().child("users/\(prefs.stringForKey("USERID"))/Favorites").child(currentProduct.productID as String).setValue(currentProduct?.title)
+        }
+        else {
+            let errorAlert = UIAlertView(title: "Favorites Error", message: "Sorry, guests cannot store favorites.", delegate: self, cancelButtonTitle: "OK")
+            errorAlert.show()
+        }
+    }
+    
     // Action when a user touches inside the 'Choose Color' text
     @IBAction func colorMenuSelected(sender: AnyObject) {
-        let sheet = createColorMenu(false)
+        let sheet = createCustomerColorMenu()
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad) {
             sheet.showFromRect(sender.frame, inView: self.view, animated: true)

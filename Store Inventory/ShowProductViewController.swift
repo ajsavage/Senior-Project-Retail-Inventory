@@ -21,7 +21,7 @@ class ShowProductViewController: UIViewController, UIActionSheetDelegate {
     // Loading Animation
     var indicator: UIActivityIndicatorView? = nil
     
-    func createColorMenu(hasAddButton: Bool) -> UIActionSheet {
+    func createCustomerColorMenu() -> UIActionSheet {
         let sheet: UIActionSheet = UIActionSheet(title: "Choose Color",
                                                  delegate: self,
                                                  cancelButtonTitle: nil,
@@ -30,11 +30,24 @@ class ShowProductViewController: UIViewController, UIActionSheetDelegate {
         sheet.tag = Constants.Colors.menuTag
         cancelColorIndex = 1 // All and Cancel buttons
         
-        // Add New Color button
-        if (hasAddButton) {
-            sheet.addButtonWithTitle("✚ Add New Color")
+        for newColor in currentProduct.colors {
+            sheet.addButtonWithTitle(newColor as String)
             cancelColorIndex += 1
         }
+        
+        colorCancelButton(sheet)
+        return sheet
+    }
+    
+    func createEmployeeColorMenu() -> UIActionSheet {
+        let sheet: UIActionSheet = UIActionSheet()
+        sheet.title = "Current Product Colors"
+        sheet.delegate = self
+        sheet.tag = Constants.Colors.menuTag
+        
+        // Add New Color button
+        sheet.addButtonWithTitle("✚ Add New Color")
+        cancelColorIndex = 1 // Add and Cancel buttons
         
         for newColor in currentProduct.colors {
             sheet.addButtonWithTitle(newColor as String)

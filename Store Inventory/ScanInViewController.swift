@@ -58,7 +58,10 @@ class ScanInViewController: ShowProductViewController, barcodeScannerCommunicato
     }
     
     @IBAction func searchFieldClicked(sender: AnyObject) {
-        if (sender.text == nil || sender.text == "") {
+        if (self.isBeingDismissed()) {
+            showErrorAlert("You are being dismissed!")
+        }
+        else if (sender.text == nil || sender.text == "") {
             showErrorAlert("Please enter a product ID to display.")
         }
         else if (sender.text!.characters.count != Constants.ProductID.Length) {
@@ -199,7 +202,7 @@ class ScanInViewController: ShowProductViewController, barcodeScannerCommunicato
     
     // Action when a user touches inside the 'Choose Color' text
     @IBAction func colorButtonClicked(sender: AnyObject) {
-        let sheet = createColorMenu(true)
+        let sheet = createEmployeeColorMenu()
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad) {
             sheet.showFromRect(sender.frame, inView: self.view, animated: true)

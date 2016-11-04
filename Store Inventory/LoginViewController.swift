@@ -9,20 +9,24 @@
 import UIKit
 import Firebase
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, GIDSignInUIDelegate {
     @IBOutlet weak var usernameLabel: UITextField!
     @IBOutlet weak var passwordLabel: UITextField!
-    
+    @IBOutlet weak var googleButton: GIDSignInButton!
+   
     // NSUserDefaults
     let prefs = NSUserDefaults.standardUserDefaults()
     
     // Global email and password
     var email = ""
     var password = ""
+    
+    // Loading Animation
+    var indicator: UIActivityIndicatorView? = nil
    
     private func validLogin() -> Bool {
-        let email = usernameLabel.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-        let password = passwordLabel.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        email = usernameLabel.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        password = passwordLabel.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         var shouldLogin = false
         
         if (email == "") {
@@ -38,7 +42,16 @@ class LoginViewController: UIViewController {
         return shouldLogin
     }
     
+    func showLoadingSymbol(loadingView: UIView) {
+        indicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        loadingView.addSubview(indicator!)
+        indicator!.frame = loadingView.bounds
+        indicator!.startAnimating()
+    }
+    
     @IBAction func loginWithUsernameAndPassword(sender: UIButton) {
+        showLoadingSymbol(view)
+        
         if validLogin() {
             FIRAuth.auth()?.signInWithEmail(email, password: password) { (user, error) in
                 if (error != nil) {
@@ -49,6 +62,8 @@ class LoginViewController: UIViewController {
     }
   
     @IBAction func loginAsGuest(sender: UIButton) {
+        showLoadingSymbol(view)
+        
         FIRAuth.auth()?.signInAnonymouslyWithCompletion() { (user, error) in
             if (error != nil) {
                 self.loginError("Cannot login as guest right now")
@@ -95,7 +110,7 @@ class LoginViewController: UIViewController {
     
     private func loggedInUser(user: FIRUser) {
         // User account type
-        var type = "Customer"
+        var type: String? = "Customer"
         
         // Guest user
         if (user.anonymous) {
@@ -109,7 +124,13 @@ class LoginViewController: UIViewController {
         else {
             // Get user type from database
             let userID = user.uid
-            type = FIRDatabase.database().reference().child("users").child(userID).valueForKey("UserType") as! String
+            type = FIRDatabase.database().reference().child("users/\(userID)").valueForKey("UserType") as? String
+            
+            // Set up database user data
+            if type == nil {
+                type = "Customer"
+                FIRDatabase.database().reference().child("users/\(userID)/UserType").setValue(type)
+            }
             
             // Set NSUserDefaults
             prefs.setObject(1, forKey: "ISLOGGEDIN")
@@ -120,7 +141,8 @@ class LoginViewController: UIViewController {
             prefs.setObject(false, forKey: "ISGUESTUSER")
         }
         
-        goToHome(type)
+        indicator?.removeFromSuperview()
+        goToHome(type!)
     }
     
     private func goToHome(userType: String) {
@@ -141,6 +163,7 @@ class LoginViewController: UIViewController {
     private func loginError(message: String) {
         let errorAlert = UIAlertView(title: "Sign in Error", message: message, delegate: self, cancelButtonTitle: "OK")
         errorAlert.show()
+        indicator?.removeFromSuperview()
     }
     
     override func viewDidLoad() {
@@ -154,7 +177,8 @@ class LoginViewController: UIViewController {
             goToHome(prefs.stringForKey("USERTYPE")!)
         }
         else {
-            FIRApp.configure()
+            GIDSignIn.sharedInstance().uiDelegate = self
+            
             FIRAuth.auth()?.addAuthStateDidChangeListener { auth, user in
                 if let user = user {
                     self.loggedInUser(user)

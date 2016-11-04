@@ -29,8 +29,34 @@ class SettingsViewController: UIViewController {
     // Loading Animation
     var indicator: UIActivityIndicatorView? = nil
     
-    func showFavorites() {
+    private func showNoFavorites() {
+        let newView = UILabel()
+        newView.text = "Currently you have no favorites saved."
+        favoritesScrollView.addSubview(newView)
+    }
+    
+    private func showFavorites() {
+        let ref: FIRDatabaseReference? = userRef!.child("Favorites")
         
+        // User has no favorites saved
+        if (ref == nil) {
+            showNoFavorites()
+        }
+        // User does have favorites saved
+        else {
+            ref!.observeSingleEventOfType(.Value, withBlock: { snapshot in
+                if !snapshot.exists() {
+                    let errorAlert = UIAlertView(title: "Favorites Error", message: "Sorry, could not load your favorites.", delegate: self, cancelButtonTitle: "OK")
+                    errorAlert.show()
+                    self.showNoFavorites()
+                }
+                else {
+   //                 for newFavorite in snapshot.children {
+     //                   favoritesScrollView.addSubview(newFavorite)
+       //             }
+                }
+            })
+        }
     }
     
     func exitSettings() {
@@ -41,7 +67,13 @@ class SettingsViewController: UIViewController {
     @IBAction func LogoutButtonClicked(sender: UIButton) {
         NSUserDefaults.standardUserDefaults().removePersistentDomainForName(NSBundle.mainBundle().bundleIdentifier!)
         prefs.setObject(0, forKey: "ISLOGGEDIN")
-        try! FIRAuth.auth()!.signOut()
+        
+        do {
+            try FIRAuth.auth()!.signOut()
+        } catch {
+            let errorAlert = UIAlertView(title: "Logout Error", message: "Sorry, we were unable to log you out at this time.", delegate: self, cancelButtonTitle: "OK")
+            errorAlert.show()
+        }
         
         // Clear navigation controller trail
         navigationController?.popToRootViewControllerAnimated(false)
