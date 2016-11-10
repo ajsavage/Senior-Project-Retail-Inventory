@@ -35,14 +35,36 @@ class Product: NSObject {
         loadFromSnapshot(data, dataRef: ref)
     }
     
-    // Sets the product's overview information and loads the image from storage
+    // Creates a product from a given product ID
+    init(prodID: String) {
+        super.init()
+        
+        _selfRef = FIRDatabase.database().reference().child("inventory/\(prodID)")
+        _id = prodID
+        
+        _selfRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
+         
+            if !snapshot.exists() { return }
+          
+            self._title = snapshot.valueForKey("Title") as! String
+            self._price = snapshot.valueForKey("Price") as! Float
+        })
+            
+        getImageFromStorage(noCallback)
+    }
+    
+    private func noCallback() {
+        
+    }
+    
+    // Sets the product's overview information
     private func loadFromSnapshot(data: FIRDataSnapshot, dataRef: FIRDatabaseReference) {
         _title = data.childSnapshotForPath("Title").value as? String
         _price = data.childSnapshotForPath("Price").value as? Float
         _selfRef = dataRef.child(data.key)
         _id = data.key
     }
-
+    
     // Loads all of the product's information from the database at the selfRef location
     func loadInformation(loadImage: Bool, callback: () -> ()) {
         if _selfRef != nil && _detailsRef == nil {

@@ -9,14 +9,17 @@
 import UIKit
 import Firebase
 
-class NewAccountViewController: UIViewController {
+class NewAccountViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var usernameLabel: UITextField!
     @IBOutlet weak var passwordLabel: UITextField!
+    @IBOutlet weak var displayNameLabel: UITextField!
     @IBOutlet weak var confirmPasswordLabel: UITextField!
     @IBOutlet weak var createAccountButton: UIButton!
     
+    // User account traits
     var email = ""
     var password = ""
+    var name = ""
     
     // Loading Animation
     var indicator: UIActivityIndicatorView? = nil
@@ -32,13 +35,12 @@ class NewAccountViewController: UIViewController {
                 if error != nil {
                     self.loginError("Could not create this account.")
                 }
-                else {
-                    FIRDatabase.database().reference().child("users/\(user?.uid)/UserType").setValue("Customer")
-                    self.indicator?.removeFromSuperview()
+                else if let user = user {
                     
-                    let errorAlert = UIAlertView(title: "New Account", message: "Successfully created new account!", delegate: self, cancelButtonTitle: "OK")
-                    errorAlert.tag = 2
-                    errorAlert.show()
+                    // Add display name
+                    FIRDatabase.database().reference().child("users/\(user.uid)/DisplayName").setValue(self.name)
+                    FIRDatabase.database().reference().child("users/\(user.uid)/UserType").setValue("Customer")
+                    self.indicator?.removeFromSuperview()
                 }
             }
         }
@@ -61,14 +63,22 @@ class NewAccountViewController: UIViewController {
     private func validLogin() -> Bool {
         email = usernameLabel.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         password = passwordLabel.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        name = displayNameLabel.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         let confirm = confirmPasswordLabel.text!
         var shouldLogin = false
         
-        if (email == "") {
+        if (name == "") {
+            loginError("Please enter a display name")
+        }
+        else if (email == "") {
             loginError("Please enter an email")
         }
         else if (password == "") {
             loginError("Please enter a password")
+        }
+        // Firebase requirement
+        else if (password.characters.count < 6) {
+            loginError("Password must be longer than 6 characters.")
         }
         else if (confirm == "") {
             loginError("Please re-enter your password to confirm")
@@ -81,5 +91,27 @@ class NewAccountViewController: UIViewController {
         }
         
         return shouldLogin
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Add dismissing keyboard by tapping
+        let dismissTap = UITapGestureRecognizer(target: self, action: #selector(EditPagesViewController.dismissKeyboard))
+        dismissTap.cancelsTouchesInView = false
+        view.addGestureRecognizer(dismissTap)
+    }
+    
+    // For Keyboard dismissal
+    func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    // Called when a textField is highlighted and the Return key is pushed
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        textField.endEditing(true)
+        
+        return true
     }
 }

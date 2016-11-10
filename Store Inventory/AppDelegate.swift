@@ -10,10 +10,9 @@ import UIKit
 import Firebase
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate , GIDSignInDelegate {
 
     var window: UIWindow?
-
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         FIRApp.configure()
@@ -24,7 +23,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         return true
     }
     
-    // Google Sign In methods
+    // Switching root controllers functions
+    func switchRootToLogin() {
+        let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+        let nav = storyboard.instantiateViewControllerWithIdentifier("loginNavigation")
+        self.window?.rootViewController = nav
+    }
+    
+    func switchRootToCustomerHome() {
+        let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+        let nav = storyboard.instantiateViewControllerWithIdentifier("customerNavigation")
+        self.window?.rootViewController = nav
+    }
+    
+    func switchRootToManagerHome() {
+        let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+        let nav = storyboard.instantiateViewControllerWithIdentifier("managerNavigation")
+        self.window?.rootViewController = nav
+    }
+    
+    func switchRootToEmployeeHome() {
+        let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+        let nav = storyboard.instantiateViewControllerWithIdentifier("employeeNavigation")
+        self.window?.rootViewController = nav
+    }
+    
+    // Google Sign In functions
     func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!, withError error: NSError!) {
         if let error = error {
             self.showLoginError("Caused this error: \(error.localizedDescription)")
@@ -64,9 +88,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
         if #available(iOS 9.0, *) {
             return GIDSignIn.sharedInstance().handleURL(url, sourceApplication: options[UIApplicationOpenURLOptionsSourceApplicationKey] as? String, annotation: options[UIApplicationOpenURLOptionsAnnotationKey])
-        } else {
-            return false
         }
+        
+        return false
     }
     
     func applicationWillResignActive(application: UIApplication) {

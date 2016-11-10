@@ -10,16 +10,27 @@ import UIKit
 import Firebase
 
 class ProductTableViewController: UITableViewController {
-
+    @IBOutlet weak var navigationTitle: UINavigationItem!
+    
+    // NSUserDefaults
+    let prefs = NSUserDefaults.standardUserDefaults()
+    
     var products = [Product]()
     let detailSegueIdentifier = "ProductDetailsSegue"
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationTitle.title = "Hi " + prefs.stringForKey("USERNAME")!
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.clearsSelectionOnViewWillAppear = false
-        
         let dataRef = FIRDatabase.database().reference().child("inventory")
         var newProduct: Product!
+        
+        // Set back button title
+        let backButton = UIBarButtonItem.init(title: "Home", style: UIBarButtonItemStyle.Bordered, target: nil, action: nil)
+        self.navigationItem.backBarButtonItem = backButton
         
         dataRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
             
@@ -57,11 +68,6 @@ class ProductTableViewController: UITableViewController {
         }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-// NEEDS CODE - release all product's details OR just all not current viewed products?
-    }
-
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -90,12 +96,4 @@ class ProductTableViewController: UITableViewController {
             destination.currentProduct = products[IDIndex]
         }
     }
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
 }

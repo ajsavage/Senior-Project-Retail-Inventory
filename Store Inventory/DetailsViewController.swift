@@ -17,6 +17,7 @@ class DetailsViewController: ShowProductViewController {
     @IBOutlet var favoritesButton: UIButton!
     @IBOutlet var inStockLabel: UILabel!
     @IBOutlet var imageLabel: UIImageView!
+    @IBOutlet weak var editButton: UIButton!
     
     // Color Dropdown Elements
     @IBOutlet var chooseColorButton: UIButton!
@@ -27,6 +28,7 @@ class DetailsViewController: ShowProductViewController {
     
     // Action when a user touches inside the Add to Favorites button
     @IBAction func favoritesButtonClicked(sender: UIButton) {
+        // Save new favorite if not a guest
         if (!prefs.boolForKey("ISGUESTUSER")) {
             FIRDatabase.database().reference().child("users/\(prefs.stringForKey("USERID"))/Favorites").child(currentProduct.productID as String).setValue(currentProduct?.title)
         }
@@ -88,7 +90,20 @@ class DetailsViewController: ShowProductViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        // Hide edit button if user is a Customer
+        if (prefs.stringForKey("USERTYPE") == "Customer") {
+            editButton.hidden = true
+        }
+        
         showLoadingSymbol(titleLabel)
         self.currentProduct.loadInformation(false, callback: updateWithLoadedData)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "gotoEditing",
+            let destination = segue.destinationViewController as? EditPagesViewController
+        {
+            destination.currentProduct = self.currentProduct
+        }
     }
 }

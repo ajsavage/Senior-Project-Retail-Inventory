@@ -9,17 +9,18 @@
 import UIKit
 import Firebase
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     @IBOutlet weak var displayNameField: UITextField!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
-    @IBOutlet weak var favoritesScrollView: UIScrollView!
+    @IBOutlet weak var favoritesTableView: UITableView!
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var passwordLabel: UILabel!
-    @IBOutlet var favoritesLabel: UIView!
+    @IBOutlet weak var favoritesLabel: UILabel!
     @IBOutlet weak var logoutButton: UIButton!
     @IBOutlet weak var logoutButtonGuest: UIButton!
-    
+    @IBOutlet weak var otherLogout: UIButton!
+ 
     var userRef: FIRDatabaseReference? = nil
     var changingPassword = false
     
@@ -29,36 +30,57 @@ class SettingsViewController: UIViewController {
     // Loading Animation
     var indicator: UIActivityIndicatorView? = nil
     
-    private func showNoFavorites() {
-        let newView = UILabel()
-        newView.text = "Currently you have no favorites saved."
-        favoritesScrollView.addSubview(newView)
+    // Favorites Table View Property and Functions
+    var favorites = [String]()
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
     }
     
-    private func showFavorites() {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return favorites.count
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.performSegueWithIdentifier("gotoDetails", sender: self)
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell: UITableViewCell = self.favoritesTableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
+        cell.textLabel?.text = self.favorites[indexPath.row]
+        return cell
+    }
+    
+    // Called when a textField is highlighted and the Return key is pushed
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        textField.endEditing(true)
+        
+        return true
+    }
+    
+    private func loadFavorites() {
         let ref: FIRDatabaseReference? = userRef!.child("Favorites")
         
-        // User has no favorites saved
-        if (ref == nil) {
-            showNoFavorites()
-        }
-        // User does have favorites saved
-        else {
-            ref!.observeSingleEventOfType(.Value, withBlock: { snapshot in
-                if !snapshot.exists() {
-                    let errorAlert = UIAlertView(title: "Favorites Error", message: "Sorry, could not load your favorites.", delegate: self, cancelButtonTitle: "OK")
-                    errorAlert.show()
-                    self.showNoFavorites()
+        ref!.observeSingleEventOfType(.Value, withBlock: { snapshot in
+            if !snapshot.exists() {
+                self.favoritesTableView.hidden = true
+                self.logoutButton.hidden = true
+            }
+            else {
+                self.otherLogout.hidden = true
+                
+                for newFavorite in snapshot.children {
+                    // Add all favorite titles
+                    self.favorites.append(newFavorite.value)
                 }
-                else {
-   //                 for newFavorite in snapshot.children {
-     //                   favoritesScrollView.addSubview(newFavorite)
-       //             }
-                }
-            })
-        }
+            }
+            
+            self.favoritesTableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+            self.favoritesTableView.reloadData()
+        })
     }
-    
+
     func exitSettings() {
         indicator?.removeFromSuperview()
         dismissViewControllerAnimated(true, completion: nil)
@@ -66,7 +88,7 @@ class SettingsViewController: UIViewController {
     
     @IBAction func LogoutButtonClicked(sender: UIButton) {
         NSUserDefaults.standardUserDefaults().removePersistentDomainForName(NSBundle.mainBundle().bundleIdentifier!)
-        prefs.setObject(0, forKey: "ISLOGGEDIN")
+        prefs.setObject(false, forKey: "ISLOGGEDIN")
         
         do {
             try FIRAuth.auth()!.signOut()
@@ -75,9 +97,10 @@ class SettingsViewController: UIViewController {
             errorAlert.show()
         }
         
-        // Clear navigation controller trail
-        navigationController?.popToRootViewControllerAnimated(false)
-        self.performSegueWithIdentifier("toLogin", sender: self)
+        // Back to Login
+   //     navigationController?.popToRootViewControllerAnimated(false)
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        appDelegate.switchRootToLogin()
     }
     
     @IBAction func CancelButtonAction(sender: UIBarButtonItem) {
@@ -97,22 +120,29 @@ class SettingsViewController: UIViewController {
         
         // If user changed their display name
         if newName != "" && newName != prefs.stringForKey("USERNAME") {
+            prefs.setObject(newName, forKey: "USERNAME")
+            
             // Set up change request
-            let user = FIRAuth.auth()?.currentUser
-            if let user = user {
-                let changeRequest = user.profileChangeRequest()
-                changeRequest.displayName = newName
-                changeRequest.commitChangesWithCompletion { error in
-                    if error != nil {
-                        self.showUpdateError("display name")
+            if (!prefs.boolForKey("ISGUESTUSER")) {
+                let user = FIRAuth.auth()?.currentUser
+                if let user = user {
+                    let changeRequest = user.profileChangeRequest()
+                    changeRequest.displayName = newName
+                    changeRequest.commitChangesWithCompletion { error in
+                        if error != nil {
+                            self.showUpdateError("display name")
+                        }
                     }
                 }
+                
+                userRef!.child("DisplayName").setValue(newName)
             }
         }
         
         // If user changed their email
         if newEmail != "" && newEmail != prefs.stringForKey("USEREMAIL") {
             let user = FIRAuth.auth()?.currentUser
+            prefs.setObject(newEmail, forKey: "USEREMAIL")
             
             user?.updateEmail(newEmail) { error in
                 if error != nil {
@@ -160,7 +190,7 @@ class SettingsViewController: UIViewController {
         emailField.hidden = true
         passwordField.hidden = true
         favoritesLabel.hidden = true
-        favoritesScrollView.hidden = true
+        favoritesTableView.hidden = true
         emailLabel.hidden = true
         passwordLabel.hidden = true
         logoutButton.hidden = true
@@ -170,6 +200,7 @@ class SettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        displayNameField.text = prefs.stringForKey("USERNAME")
         
         if prefs.boolForKey("ISGUESTUSER") {
             setupGuestView()
@@ -178,9 +209,29 @@ class SettingsViewController: UIViewController {
             emailField.text = prefs.stringForKey("USEREMAIL")
             userRef = FIRDatabase.database().reference().child("users").child(prefs.stringForKey("USERID")! as String)
             
-            showFavorites()
+            loadFavorites()
         }
+        
+        // Add dismissing keyboard by tapping
+        let dismissTap = UITapGestureRecognizer(target: self, action: #selector(EditPagesViewController.dismissKeyboard))
+        dismissTap.cancelsTouchesInView = false
+        view.addGestureRecognizer(dismissTap)
+    }
+    
+    // For Keyboard dismissal
+    func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "gotoDetails",
+            let destination = segue.destinationViewController as? DetailsViewController,
+            IDIndex = favoritesTableView.indexPathForSelectedRow?.row
+        {
+            // Load requested product
+            let product = Product(prodID: favorites[IDIndex])
             
-        displayNameField.text = prefs.stringForKey("USERNAME")
+            destination.currentProduct = product
+        }
     }
 }

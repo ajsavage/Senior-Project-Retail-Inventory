@@ -300,7 +300,7 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
         if (currentProduct == nil) {
             overallScrollView.hidden = true
             view.backgroundColor = UIColor.blackColor()
-            searchField.becomeFirstResponder()
+       //     searchField.becomeFirstResponder()
         }
         else {
             showLoadingSymbol(searchField)
