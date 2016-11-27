@@ -25,6 +25,10 @@ class BarcodeScanner: UIViewController, AVCaptureMetadataOutputObjectsDelegate, 
     var code: String?
     var delegate: barcodeScannerCommunicator? = nil
     
+    override func shouldAutorotate() -> Bool {
+        return false
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

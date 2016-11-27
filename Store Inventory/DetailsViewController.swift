@@ -17,7 +17,8 @@ class DetailsViewController: ShowProductViewController {
     @IBOutlet var favoritesButton: UIButton!
     @IBOutlet var inStockLabel: UILabel!
     @IBOutlet var imageLabel: UIImageView!
-    @IBOutlet weak var editButton: UIButton!
+    @IBOutlet weak var editButton: UIBarButtonItem!
+    @IBOutlet weak var settingsButton: UIBarButtonItem!
     
     // Color Dropdown Elements
     @IBOutlet var chooseColorButton: UIButton!
@@ -92,7 +93,12 @@ class DetailsViewController: ShowProductViewController {
         
         // Hide edit button if user is a Customer
         if (prefs.stringForKey("USERTYPE") == "Customer") {
-            editButton.hidden = true
+            editButton.enabled = false
+            editButton.tintColor = UIColor.clearColor()
+        }
+        else {
+            settingsButton.enabled = false
+            settingsButton.tintColor = UIColor.clearColor()
         }
         
         showLoadingSymbol(titleLabel)

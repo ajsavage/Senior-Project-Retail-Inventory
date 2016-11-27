@@ -22,6 +22,12 @@ class Details: NSObject {
         _description = "These are the default details"
     }
     
+    // Creates product details from the given dictionary
+    init(dictionary: NSDictionary) {
+        _description = dictionary["Description"] as! String
+        _type = dictionary["Type"] as! String
+    }
+    
     // Creates a product from the given snapshot information
     init(ref: FIRDatabaseReference!, callback: () -> ()) {
         super.init()

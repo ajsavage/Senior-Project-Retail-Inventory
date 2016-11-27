@@ -16,6 +16,7 @@ class Constants: NSObject {
     struct Types {
         static let Names = ["Shirt", "Pants", "Dress"]
         static let menuTag = 3
+        static let Filters = ["Shirt", "Pants", "Dress", "All"]
     }
     
     struct Sizes {
@@ -32,6 +33,7 @@ class Constants: NSObject {
     
     struct Colors {
         static let menuTag = 2
+        static let Names = ["White", "Gray", "Black", "Pink", "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Brown"]
     }
     
     struct Description {

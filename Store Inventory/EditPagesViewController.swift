@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, UITextFieldDelegate, UITextViewDelegate {
+class EditPagesViewController: ShowProductViewController {
     // Product Viewing Elements
     @IBOutlet var titleLabel: UITextView!
     @IBOutlet var priceLabel: UITextField!
@@ -28,21 +28,15 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
     // If the image was updated
     var imageChanged = false
     
-    private func showErrorAlert(message: String) {
-        let errorAlert = UIAlertView(title: "Invalid Search", message: message, delegate: self, cancelButtonTitle: "OK")
-        errorAlert.tag = -1
-        errorAlert.show()
-    }
-    
     @IBAction func searchFieldClicked(sender: AnyObject) {
         if (self.isBeingDismissed()) {
-            showErrorAlert("You are being dismissed!")
+            showSearchAlert("You are being dismissed!")
         }
         else if (sender.text == nil || sender.text == "") {
-            showErrorAlert("Please enter a product ID to display.")
+            showSearchAlert("Please enter a product ID to display.")
         }
         else if (sender.text!.characters.count != Constants.ProductID.Length) {
-            showErrorAlert("Not a valid Product ID - Product IDs must be exactly \(Constants.ProductID.Length) characters long.")
+            showSearchAlert("Not a valid Product ID - Product IDs must be exactly \(Constants.ProductID.Length) characters long.")
         }
         else {
             showLoadingSymbol(searchField)
@@ -55,7 +49,7 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
             
             productRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
                 if !snapshot.exists() {
-                    self.showErrorAlert("Product ID# " + capitalID + " does not currently exist in the database.")
+                    self.showSearchAlert("Product ID# " + capitalID + " does not currently exist in the database.")
                     self.removeLoadingSymbol(self.searchField)
                 }
                 else {
@@ -64,19 +58,6 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
                 }
             })
         }
-    }
-    
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        if (textView.tag != Constants.Description.fieldTag) {
-            // Return key was pressed
-            if text == "\n" {
-                textView.resignFirstResponder()
-                textView.endEditing(true)
-                
-                return false
-            }
-        }
-        return true
     }
     
     // Called when a textView is selected for editing
@@ -91,14 +72,6 @@ class EditPagesViewController: ShowProductViewController, UIAlertViewDelegate, U
         if (textView.tag == Constants.Description.fieldTag) {
             animateDescriptionScrollView(descriptionScrollView, distanceLength: -200, up: false)
         }
-    }
-    
-    // Called when a textField is highlighted and the Return key is pushed
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        textField.endEditing(true)
-      
-        return true
     }
     
     // Called when the product's details are finished loading from the database

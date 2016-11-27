@@ -179,9 +179,6 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, UITextFieldDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-      
-        prefs.setBool(false, forKey: "ISLOGGEDIN")
-        try! FIRAuth.auth()!.signOut()
         
         // Set up NSUserDefaults
         let loggedIn = prefs.boolForKey("ISLOGGEDIN")

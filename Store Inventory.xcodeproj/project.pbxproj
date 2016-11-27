@@ -17,6 +17,8 @@
 		9961FC451DBEC10B004AA9BE /* ShowProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9961FC441DBEC10B004AA9BE /* ShowProductViewController.swift */; };
 		997746011DBA316200AB7279 /* ProductCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997746001DBA316200AB7279 /* ProductCollectionViewController.swift */; };
 		997746031DBA329B00AB7279 /* ProductCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997746021DBA329B00AB7279 /* ProductCollectionViewCell.swift */; };
+		9988F3E81DEA625E000AB5E0 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9988F3E71DEA625E000AB5E0 /* Helper.swift */; };
+		9988F3EA1DEB3611000AB5E0 /* AddProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9988F3E91DEB3611000AB5E0 /* AddProductViewController.swift */; };
 		99BC70331DAB00D9007AA01F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BC70321DAB00D9007AA01F /* AppDelegate.swift */; };
 		99BC70351DAB00D9007AA01F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BC70341DAB00D9007AA01F /* ViewController.swift */; };
 		99BC70381DAB00D9007AA01F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 99BC70361DAB00D9007AA01F /* Main.storyboard */; };
@@ -33,6 +35,7 @@
 		99F278A21DAB9DD300251DB2 /* ProductTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F278A11DAB9DD300251DB2 /* ProductTableViewCell.swift */; };
 		99F278A41DABA22800251DB2 /* ProductTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F278A31DABA22800251DB2 /* ProductTableViewController.swift */; };
 		99F278A61DABDF0300251DB2 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F278A51DABDF0300251DB2 /* DetailsViewController.swift */; };
+		99FC399A1DE2E22800CCF211 /* StoreInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC39991DE2E22800CCF211 /* StoreInfoViewController.swift */; };
 		99FFDA911DAECF7700634ECD /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FFDA901DAECF7700634ECD /* SettingsViewController.swift */; };
 		EFFD408C7BD5CD17BFC8AC99 /* Pods_Store_Inventory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA81C73510F0DA6F585C3BCB /* Pods_Store_Inventory.framework */; };
 /* End PBXBuildFile section */
@@ -71,6 +74,8 @@
 		9961FC441DBEC10B004AA9BE /* ShowProductViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowProductViewController.swift; sourceTree = "<group>"; };
 		997746001DBA316200AB7279 /* ProductCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCollectionViewController.swift; sourceTree = "<group>"; };
 		997746021DBA329B00AB7279 /* ProductCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCollectionViewCell.swift; sourceTree = "<group>"; };
+		9988F3E71DEA625E000AB5E0 /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		9988F3E91DEB3611000AB5E0 /* AddProductViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddProductViewController.swift; sourceTree = "<group>"; };
 		99BC702F1DAB00D9007AA01F /* Store Inventory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Store Inventory.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		99BC70321DAB00D9007AA01F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		99BC70341DAB00D9007AA01F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -92,6 +97,7 @@
 		99F278A11DAB9DD300251DB2 /* ProductTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductTableViewCell.swift; sourceTree = "<group>"; };
 		99F278A31DABA22800251DB2 /* ProductTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductTableViewController.swift; sourceTree = "<group>"; };
 		99F278A51DABDF0300251DB2 /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
+		99FC39991DE2E22800CCF211 /* StoreInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreInfoViewController.swift; sourceTree = "<group>"; };
 		99FFDA901DAECF7700634ECD /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		ADF392300AD617DD84BA0583 /* Pods-Store InventoryUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Store InventoryUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Store InventoryUITests/Pods-Store InventoryUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		E28778C1525AB24051AF2AEB /* Pods-Store Inventory.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Store Inventory.release.xcconfig"; path = "Pods/Target Support Files/Pods-Store Inventory/Pods-Store Inventory.release.xcconfig"; sourceTree = "<group>"; };
@@ -173,6 +179,7 @@
 		9971285B1DD4131C00EDB6DB /* Manager Views */ = {
 			isa = PBXGroup;
 			children = (
+				9988F3E91DEB3611000AB5E0 /* AddProductViewController.swift */,
 			);
 			name = "Manager Views";
 			sourceTree = "<group>";
@@ -206,6 +213,7 @@
 			children = (
 				99BC70361DAB00D9007AA01F /* Main.storyboard */,
 				99562DFB1DC7279A0003A016 /* BarcodeScanner.swift */,
+				9988F3E71DEA625E000AB5E0 /* Helper.swift */,
 				9961FC421DBE567C004AA9BE /* Constants.swift */,
 				99F2789F1DAB65F600251DB2 /* Product.swift */,
 				99D2975A1DBA0562007AD05A /* Details.swift */,
@@ -244,6 +252,7 @@
 		99FFDA8F1DAECDC500634ECD /* Customer Views */ = {
 			isa = PBXGroup;
 			children = (
+				99FC39991DE2E22800CCF211 /* StoreInfoViewController.swift */,
 				997746021DBA329B00AB7279 /* ProductCollectionViewCell.swift */,
 				99F278A51DABDF0300251DB2 /* DetailsViewController.swift */,
 				997746001DBA316200AB7279 /* ProductCollectionViewController.swift */,
@@ -537,11 +546,14 @@
 			files = (
 				99BC70351DAB00D9007AA01F /* ViewController.swift in Sources */,
 				99F278A21DAB9DD300251DB2 /* ProductTableViewCell.swift in Sources */,
+				9988F3EA1DEB3611000AB5E0 /* AddProductViewController.swift in Sources */,
 				9961FC451DBEC10B004AA9BE /* ShowProductViewController.swift in Sources */,
 				997746031DBA329B00AB7279 /* ProductCollectionViewCell.swift in Sources */,
 				99FFDA911DAECF7700634ECD /* SettingsViewController.swift in Sources */,
 				9900EEE21DC4244E006F1CDC /* ScanInViewController.swift in Sources */,
+				99FC399A1DE2E22800CCF211 /* StoreInfoViewController.swift in Sources */,
 				99F278A01DAB65F600251DB2 /* Product.swift in Sources */,
+				9988F3E81DEA625E000AB5E0 /* Helper.swift in Sources */,
 				9961FC411DBE4504004AA9BE /* EditPagesViewController.swift in Sources */,
 				997746011DBA316200AB7279 /* ProductCollectionViewController.swift in Sources */,
 				99562DFC1DC7279A0003A016 /* BarcodeScanner.swift in Sources */,
@@ -706,14 +718,14 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Store",
+					"$(PROJECT_DIR)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "edu.calpoly.ajsavage.Store-Inventory";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Store Inventory/Store Inventory-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Debug;
@@ -733,13 +745,13 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Store",
+					"$(PROJECT_DIR)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "edu.calpoly.ajsavage.Store-Inventory";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Store Inventory/Store Inventory-Bridging-Header.h";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

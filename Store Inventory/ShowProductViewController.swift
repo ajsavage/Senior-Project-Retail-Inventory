@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ShowProductViewController: UIViewController, UIActionSheetDelegate {
+class ShowProductViewController: Helper, UIActionSheetDelegate, UIAlertViewDelegate {
     // Product to display details about
     var currentProduct: Product! = nil
     
@@ -17,9 +17,6 @@ class ShowProductViewController: UIViewController, UIActionSheetDelegate {
     var cancelColorIndex = 0
     var cancelSizeIndex = 0
     var typeName = ""
-    
-    // Loading Animation
-    var indicator: UIActivityIndicatorView? = nil
     
     func createCustomerColorMenu() -> UIActionSheet {
         let sheet: UIActionSheet = UIActionSheet(title: "Choose Color",
@@ -147,17 +144,5 @@ class ShowProductViewController: UIViewController, UIActionSheetDelegate {
         }
         
         return "In Stock: " + String(stock)
-    }
-    
-    func removeLoadingSymbol(loadingView: UIView) {
-        indicator?.removeFromSuperview()
-        loadingView.resignFirstResponder()
-    }
-    
-    func showLoadingSymbol(loadingView: UIView) {
-        indicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-        loadingView.addSubview(indicator!)
-        indicator!.frame = loadingView.bounds
-        indicator!.startAnimating()
     }
 }
