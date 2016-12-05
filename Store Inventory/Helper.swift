@@ -30,7 +30,7 @@ class Helper: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     // Called when a textView is highlighted and the Return key is pushed
     // From UITextViewDelegate
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        if (textView.tag != Constants.Description.fieldTag) {
+        if (textView.tag != Constants.Description.FieldTag) {
             // Return key was pressed
             if text == "\n" {
                 textView.resignFirstResponder()

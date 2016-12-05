@@ -85,14 +85,14 @@ class ScanInViewController: ShowProductViewController, barcodeScannerCommunicato
     
     // Called when a textView is selected for editing
     func textViewDidBeginEditing(textView: UITextView) {
-        if (textView.tag == Constants.Description.fieldTag) {
+        if (textView.tag == Constants.Description.FieldTag) {
             animateDescriptionScrollView(descriptionScrollView, distanceLength: -200, up: true)
         }
     }
     
     // Called when a textView is being edited and the Return key is pushed
     func textViewDidEndEditing(textView: UITextView) {
-        if (textView.tag == Constants.Description.fieldTag) {
+        if (textView.tag == Constants.Description.FieldTag) {
             animateDescriptionScrollView(descriptionScrollView, distanceLength: -200, up: false)
         }
     }
@@ -205,7 +205,7 @@ class ScanInViewController: ShowProductViewController, barcodeScannerCommunicato
     }
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        if (alertView.tag == Constants.Colors.menuTag) {
+        if (alertView.tag == Constants.Colors.MenuTag) {
             if (checkIndex(0, alertView: alertView) && checkIndex(1, alertView: alertView)) {
                 let color: String = alertView.textFieldAtIndex(1)!.text!
                 let realColor: String = alertView.textFieldAtIndex(0)!.text!
@@ -222,7 +222,7 @@ class ScanInViewController: ShowProductViewController, barcodeScannerCommunicato
         let errorAlert = UIAlertView()
         errorAlert.title = "Enter New Color"
         errorAlert.alertViewStyle = UIAlertViewStyle.LoginAndPasswordInput
-        errorAlert.tag = Constants.Colors.menuTag
+        errorAlert.tag = Constants.Colors.MenuTag
         errorAlert.delegate = self
         
         errorAlert.addButtonWithTitle("OK")
@@ -238,7 +238,7 @@ class ScanInViewController: ShowProductViewController, barcodeScannerCommunicato
     }
     
     func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
-        if (actionSheet.tag == Constants.Colors.menuTag) {
+        if (actionSheet.tag == Constants.Colors.MenuTag) {
             // Add buttonup
             if (buttonIndex == 1) {
                 createNewColorView()
@@ -247,7 +247,7 @@ class ScanInViewController: ShowProductViewController, barcodeScannerCommunicato
                 actionSheetButtonClicked(actionSheet, buttonIndex: buttonIndex, view: chooseColorLabel)
             }
         }
-        else if (actionSheet.tag == Constants.Types.menuTag) {
+        else if (actionSheet.tag == Constants.Types.MenuTag) {
             actionSheetButtonClicked(actionSheet, buttonIndex: buttonIndex, view: chooseTypeLabel)
         }
     }
@@ -256,7 +256,7 @@ class ScanInViewController: ShowProductViewController, barcodeScannerCommunicato
         super.viewDidLoad()
         
         // Set description textView tag
-        descriptionLabel.tag = Constants.Description.fieldTag
+        descriptionLabel.tag = Constants.Description.FieldTag
         
         // Add rounded border to title textview
         titleLabel.layer.borderColor = UIColor.lightGrayColor().CGColor

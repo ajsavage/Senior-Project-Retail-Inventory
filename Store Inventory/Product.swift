@@ -16,6 +16,9 @@ class Product: NSObject {
     private var _price: Float! = -1
     private var _id: NSString! = "AAA000"
     
+    // Holds a dictionary to load from if needed
+    private var _dictionary: NSDictionary = [:]
+    
     // Reference to this product in the database
     private var _selfRef: FIRDatabaseReference!
     
@@ -37,17 +40,15 @@ class Product: NSObject {
         _id = dict["ID"] as! String
         _title = dict["Title"] as! String
         _price = dict["Price"] as! Float
-            
+        _detailsRef = Details(dictionary: dict)
+        _dictionary = dict
+        
         if (dict["Image"] == nil) {
             _image = UIImage(named: "DefaultImage")
         }
         else {
-            getImageFromStorage(noCallback)
+            getImageFromStorage(loadProductToDatabase)
         }
-        
-        _detailsRef = Details(dictionary: dict)
-        
-        loadProductToDatabase(dict)
     }
     
     // Creates a product from the given snapshot information
@@ -78,11 +79,12 @@ class Product: NSObject {
         
     }
     
-    private func loadProductToDatabase(dictionary: NSDictionary) {
-        let mutDictionary: NSMutableDictionary = dictionary.mutableCopy() as! NSMutableDictionary
+    private func loadProductToDatabase() {
+        let mutDictionary: NSMutableDictionary = _dictionary.mutableCopy() as! NSMutableDictionary
         mutDictionary.removeObjectForKey("Image")
         mutDictionary.removeObjectForKey("ID")
         
+        // sets the _selfRef location in the database to the current dictionary
         _selfRef.setValue(mutDictionary)
     }
     

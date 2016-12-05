@@ -11,6 +11,7 @@
 		9900EEE21DC4244E006F1CDC /* ScanInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9900EEE11DC4244E006F1CDC /* ScanInViewController.swift */; };
 		9937A67F1DC9E4FF0002F11F /* NewAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9937A67E1DC9E4FF0002F11F /* NewAccountViewController.swift */; };
 		9937A6811DC9E50B0002F11F /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9937A6801DC9E50B0002F11F /* LoginViewController.swift */; };
+		9942A1B81DF4C57800204B88 /* AddNewColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9942A1B71DF4C57800204B88 /* AddNewColorViewController.swift */; };
 		99562DFC1DC7279A0003A016 /* BarcodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99562DFB1DC7279A0003A016 /* BarcodeScanner.swift */; };
 		9961FC411DBE4504004AA9BE /* EditPagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9961FC401DBE4504004AA9BE /* EditPagesViewController.swift */; };
 		9961FC431DBE567C004AA9BE /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9961FC421DBE567C004AA9BE /* Constants.swift */; };
@@ -67,6 +68,7 @@
 		9900EEE11DC4244E006F1CDC /* ScanInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanInViewController.swift; sourceTree = "<group>"; };
 		9937A67E1DC9E4FF0002F11F /* NewAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewAccountViewController.swift; sourceTree = "<group>"; };
 		9937A6801DC9E50B0002F11F /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		9942A1B71DF4C57800204B88 /* AddNewColorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewColorViewController.swift; sourceTree = "<group>"; };
 		994CDBBF1DCC25DB0012203E /* Store Inventory-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Store Inventory-Bridging-Header.h"; sourceTree = "<group>"; };
 		99562DFB1DC7279A0003A016 /* BarcodeScanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarcodeScanner.swift; sourceTree = "<group>"; };
 		9961FC401DBE4504004AA9BE /* EditPagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPagesViewController.swift; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 		9971285B1DD4131C00EDB6DB /* Manager Views */ = {
 			isa = PBXGroup;
 			children = (
+				9942A1B71DF4C57800204B88 /* AddNewColorViewController.swift */,
 				9988F3E91DEB3611000AB5E0 /* AddProductViewController.swift */,
 			);
 			name = "Manager Views";
@@ -551,6 +554,7 @@
 				997746031DBA329B00AB7279 /* ProductCollectionViewCell.swift in Sources */,
 				99FFDA911DAECF7700634ECD /* SettingsViewController.swift in Sources */,
 				9900EEE21DC4244E006F1CDC /* ScanInViewController.swift in Sources */,
+				9942A1B81DF4C57800204B88 /* AddNewColorViewController.swift in Sources */,
 				99FC399A1DE2E22800CCF211 /* StoreInfoViewController.swift in Sources */,
 				99F278A01DAB65F600251DB2 /* Product.swift in Sources */,
 				9988F3E81DEA625E000AB5E0 /* Helper.swift in Sources */,

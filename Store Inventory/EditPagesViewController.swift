@@ -62,14 +62,14 @@ class EditPagesViewController: ShowProductViewController {
     
     // Called when a textView is selected for editing
     func textViewDidBeginEditing(textView: UITextView) {
-        if (textView.tag == Constants.Description.fieldTag) {
+        if (textView.tag == Constants.Description.FieldTag) {
             animateDescriptionScrollView(descriptionScrollView, distanceLength: -200, up: true)
         }
     }
     
     // Called when a textView is being edited and the Return key is pushed
     func textViewDidEndEditing(textView: UITextView) {
-        if (textView.tag == Constants.Description.fieldTag) {
+        if (textView.tag == Constants.Description.FieldTag) {
             animateDescriptionScrollView(descriptionScrollView, distanceLength: -200, up: false)
         }
     }
@@ -206,7 +206,7 @@ class EditPagesViewController: ShowProductViewController {
     }
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        if (alertView.tag == Constants.Colors.menuTag) {
+        if (alertView.tag == Constants.Colors.MenuTag) {
             if (checkIndex(0, alertView: alertView) && checkIndex(1, alertView: alertView)) {
                 let color: String = alertView.textFieldAtIndex(1)!.text!
                 let realColor: String = alertView.textFieldAtIndex(0)!.text!
@@ -223,7 +223,7 @@ class EditPagesViewController: ShowProductViewController {
         let errorAlert = UIAlertView()
         errorAlert.title = "Enter New Color"
         errorAlert.alertViewStyle = UIAlertViewStyle.LoginAndPasswordInput
-        errorAlert.tag = Constants.Colors.menuTag
+        errorAlert.tag = Constants.Colors.MenuTag
         errorAlert.delegate = self
         
         errorAlert.addButtonWithTitle("OK")
@@ -240,7 +240,7 @@ class EditPagesViewController: ShowProductViewController {
 
     func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
         // If is the size action sheet
-        if (actionSheet.tag == Constants.Sizes.menuTag) {
+        if (actionSheet.tag == Constants.Sizes.MenuTag) {
             // All button
             if (buttonIndex == 0) {
                 chooseSizeLabel.text = actionSheet.buttonTitleAtIndex(buttonIndex)
@@ -252,7 +252,7 @@ class EditPagesViewController: ShowProductViewController {
             
             inStockLabel.text = calculateStock
         }
-        else if (actionSheet.tag == Constants.Colors.menuTag) {
+        else if (actionSheet.tag == Constants.Colors.MenuTag) {
             // Add buttonup
             if (buttonIndex == 1) {
                 createNewColorView()
@@ -261,7 +261,7 @@ class EditPagesViewController: ShowProductViewController {
                 actionSheetButtonClicked(actionSheet, buttonIndex: buttonIndex, view: chooseColorLabel)
             }
         }
-        else if (actionSheet.tag == Constants.Types.menuTag) {
+        else if (actionSheet.tag == Constants.Types.MenuTag) {
             actionSheetButtonClicked(actionSheet, buttonIndex: buttonIndex, view: chooseTypeLabel)
         }
     }
@@ -281,7 +281,7 @@ class EditPagesViewController: ShowProductViewController {
         }
         
         // Set description textView tag
-        descriptionLabel.tag = Constants.Description.fieldTag
+        descriptionLabel.tag = Constants.Description.FieldTag
         
         // Add rounded border to title textview
         titleLabel.layer.borderColor = UIColor.lightGrayColor().CGColor

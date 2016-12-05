@@ -16,11 +16,21 @@ class AddProductViewController: Helper {
     @IBOutlet weak var productIDField: UITextField!
     @IBOutlet weak var priceField: UITextField!
     @IBOutlet weak var typeField: UISegmentedControl!
+    @IBOutlet weak var loadingSymbolLabel: UILabel!
     @IBOutlet weak var colorView: UIView!
-    @IBOutlet weak var saveButton: UIButton!
 
     // Created Product
     var product: Product? = nil
+    
+    // Colors dictionary
+    let colorDictionary: NSMutableDictionary = [:]
+    let sizeDictionary: NSMutableDictionary = [:]
+    
+    // Color Swatch View Properties
+    let colorSwatchHeight = 40
+    let colorSwatchWidth = 30
+    var nextXValue = 0
+    var nextYValue = 0
     
     // Button actions
     @IBAction func editImageButtonPushed(sender: AnyObject) {
@@ -32,7 +42,7 @@ class AddProductViewController: Helper {
     }
     
     @IBAction func saveButtonPushed(sender: AnyObject) {
-        showLoadingSymbol(saveButton)
+        showLoadingSymbol(loadingSymbolLabel)
         var temp: String
         let dictionary = Dictionary<String, AnyObject>()
         
@@ -63,12 +73,60 @@ class AddProductViewController: Helper {
         })
     }
     
-    @IBAction func AddColorButtonPushed(sender: AnyObject) {
-        // Open color adding view
+    // Callback for adding a new color swatch
+    func addNewColor(color: UIColor, colorName: String, colorType: String, sizes: NSDictionary) {
+        // Add new color and sizes to dictionaries
+        sizeDictionary["XSmall"] = sizeDictionary["XSmall"] as! Int + (sizes["XSmall"] as! Int)
+        sizeDictionary["Small"] = sizeDictionary["Small"] as! Int + (sizes["Small"] as! Int)
+        sizeDictionary["Medium"] = sizeDictionary["Medium"] as! Int + (sizes["Medium"] as! Int)
+        sizeDictionary["Large"] = sizeDictionary["Large"] as! Int + (sizes["Large"] as! Int)
+        sizeDictionary["XLarge"] = sizeDictionary["XLarge"] as! Int + (sizes["XLarge"] as! Int)
+            
+        // Add to colors dictionary
+        colorDictionary[colorType]?.setObject(sizes, forKey: colorName)
         
-        // Add new colored square to view
+        setUpSwatchView(color)
     }
     
+    // Helper for addNewColor method
+    // Sets up color swatch
+    private func setUpSwatchView(color: UIColor) {
+        // Create new color swatch
+        let colorSwatch = UIView()
+        var addHeight = 0
+        colorSwatch.backgroundColor = color
+        colorSwatch.frame = CGRect(x: nextXValue, y: nextYValue, width: colorSwatchWidth, height: colorSwatchHeight)
+        
+        // Calculate addHeight, which is the height of a color swatch
+        // plus extras pace unless on the first row
+        if nextYValue == 0 {
+            addHeight = colorSwatchHeight
+        }
+        else {
+            addHeight = colorSwatchHeight + 10
+        }
+        
+        // Update next x and y values
+        nextXValue = nextXValue + colorSwatchWidth + 10
+        
+        // Move down to the next row if reached the end of the colorView
+        if Float(nextXValue + colorSwatchWidth) > Float(colorView.bounds.width) {
+            nextXValue = 0
+            nextYValue = nextYValue + addHeight
+        }
+        
+        // Extend color view height
+        if nextXValue == 0 {
+            let newFrame = CGRect(x: colorView.bounds.minX, y: colorView.bounds.minY, width: colorView.bounds.width, height: CGFloat(nextYValue + colorSwatchHeight))
+            
+            colorView.frame = newFrame
+        }
+        
+        colorView.addSubview(colorSwatch)
+    }
+    
+    // Helper method for the saveButtonPushed method
+    // Checks each of the fields to ensure they all have data
     private func continueSavingProduct(dict: Dictionary<String, AnyObject>) {
         var temp: String
         var dictionary = dict
@@ -129,22 +187,37 @@ class AddProductViewController: Helper {
         // Image
         if (imageView.image != nil) {
             dictionary["Image"] = dictionary["ID"]
-            //UPLOAD
+            UPLOAD
         }
         else {
             dictionary["Image"] = nil
         }
         
-        //        if (colorView.subviews.count == 0) {
-        //          showErrorAlert("New Product Error", message: "Please add at least one color.")
-        //        return
-        //  }
+        if (colorView.subviews.count == 0) {
+            showErrorAlert("New Product Error", message: "Please add at least one color.")
+            return
+        }
+        else {
+            dictionary["Colors"] = colorDictionary
+            dictionary["Sizes"] = sizeDictionary
+        }
         
         product = Product(dict: dictionary)
         
-        removeLoadingSymbol(saveButton)
+        indicator?.removeFromSuperview()
         navigationController?.popViewControllerAnimated(true)
         self.presentViewController(EditPagesViewController(), animated: true, completion: nil)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Set up the size dictionary with all zeroes
+        sizeDictionary["XSmall"] = 0
+        sizeDictionary["Small"] = 0
+        sizeDictionary["Medium"] = 0
+        sizeDictionary["Large"] = 0
+        sizeDictionary["XLarge"] = 0
     }
     
     func showSaveErrorAlert(message: String) {
@@ -162,10 +235,17 @@ class AddProductViewController: Helper {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let destination = segue.destinationViewController as? EditPagesViewController
-        
-        if destination != nil {
-            destination!.currentProduct = self.product
+        if segue.identifier == "addNewColorSegue",
+            let destination = segue.destinationViewController as? AddNewColorViewController
+        {
+            destination.addProductCallback = addNewColor
+        }
+        else {
+            let destination = segue.destinationViewController as? EditPagesViewController
+            
+            if destination != nil {
+                destination!.currentProduct = self.product
+            }
         }
     }
 }

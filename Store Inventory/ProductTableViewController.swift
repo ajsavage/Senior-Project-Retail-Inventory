@@ -9,13 +9,14 @@
 import UIKit
 import Firebase
 
-class ProductTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UISearchBarDelegate, UISearchDisplayDelegate {
+class ProductTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UISearchBarDelegate, UISearchDisplayDelegate, UITextFieldDelegate {
     @IBOutlet weak var navigationTitle: UINavigationItem!
     @IBOutlet weak var tableView: UITableView!
 
     // Filter Properties
     @IBOutlet weak var filterButton: UIButton!
     @IBOutlet weak var filterView: UIView!
+    @IBOutlet weak var loadingSymbolLabel: UILabel!
     
     // Price Properties
     @IBOutlet weak var maxPriceLabel: UILabel!
@@ -29,21 +30,9 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
     
     // Color Buttons
     @IBOutlet weak var allButton: UIButton!
-    @IBOutlet weak var whiteButton: UIButton!
-    @IBOutlet weak var grayButton: UIButton!
-    @IBOutlet weak var blackButton: UIButton!
-    @IBOutlet weak var pinkButton: UIButton!
-    @IBOutlet weak var redButton: UIButton!
-    @IBOutlet weak var orangeButton: UIButton!
-    @IBOutlet weak var yellowButton: UIButton!
-    @IBOutlet weak var greenButton: UIButton!
-    @IBOutlet weak var blueButton: UIButton!
-    @IBOutlet weak var purpleButton: UIButton!
-    @IBOutlet weak var brownButton: UIButton!
+    @IBOutlet var coloredButtons: [UIButton]!
     
-    // Colored buttons array
-    var coloredButtons = [UIButton]()
-    
+    // Arrays holding the products currently on the phone
     var products = [Product]()
     var productSearchResults = [Product]()
     
@@ -76,6 +65,8 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     @IBAction func searchButton(sender: UIButton) {
+        showLoadingSymbol(loadingSymbolLabel)
+        
         // Filter for a title search and resets productSearchResults
         filterProductsByTitle(titleSearch.text!)
         
@@ -112,7 +103,7 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
             
             for button in coloredButtons {
                 if (button.selected) {
-                    searchColors.append(Constants.Colors.Names[button.tag])
+                    searchColors.append(Constants.Colors.Names[coloredButtons.indexOf(button)!])
                 }
             }
             
@@ -149,20 +140,15 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
         }
         // Filter search results
         else {
-           /** let searchQuery = dataRef.child("inventory").queryOrderedByChild("Title").queryStartingAtValue(searchText).queryEndingAtValue(searchText)
+            let searchQuery = dataRef.child("inventory").queryOrderedByChild("Title").queryStartingAtValue(searchText).queryEndingAtValue(searchText)
             
+            self.productSearchResults = []
             loadProductsFromQuery(searchQuery)
-           */
-            self.productSearchResults = self.products.filter() {
-                ($0 as Product).title.lowercaseString.rangeOfString(searchText.lowercaseString) != nil
-            }
         }
     }
     
     // Loads all of the products returned by the given database query
     private func loadProductsFromQuery(query: FIRDatabaseQuery) {
-        self.productSearchResults = []
-        
         query.observeEventType(.Value, withBlock: { snapshot in
             if snapshot.exists() {
                 var newProduct: Product
@@ -192,20 +178,32 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
             self.maxPriceLabel.text = "$\(maxPrice)"
             self.priceSlider.maximumValue = maxPrice
         })
-
-        // Add all colored buttons to the array
-        coloredButtons.append(allButton)
-        coloredButtons.append(whiteButton)
-        coloredButtons.append(grayButton)
-        coloredButtons.append(blackButton)
-        coloredButtons.append(pinkButton)
-        coloredButtons.append(redButton)
-        coloredButtons.append(orangeButton)
-        coloredButtons.append(yellowButton)
-        coloredButtons.append(greenButton)
-        coloredButtons.append(blueButton)
-        coloredButtons.append(purpleButton)
-        coloredButtons.append(brownButton)
+    }
+    
+    // Grays out all other filter options if there is data in the product ID field
+    func textFieldDidEndEditing(textField: UITextField) {
+        if (textField == idSearch) {
+            // Change filter access
+            if idSearch.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) == "" {
+                disableAllOtherFilters(true)
+            }
+            else {
+                disableAllOtherFilters(false)
+            }
+        }
+    }
+    
+    // Helper method that disables or enables all filter options except the product ID
+    // text field if there is non-whitespace text in the field
+    private func disableAllOtherFilters(shouldDisable: Bool) {
+        priceSlider.enabled = !shouldDisable
+        titleSearch.enabled = !shouldDisable
+        typeSearch.enabled = !shouldDisable
+        allButton.enabled = !shouldDisable
+        
+        for colorButton in coloredButtons {
+            colorButton.enabled = !shouldDisable
+        }
     }
     
     // Closes a textField with the return key
@@ -264,6 +262,7 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
             
                 self.productSearchResults = self.products
                 self.tableView.reloadData()
+             //   self.tableView.insertRowsAtIndexPaths([NSIndexPath(row: self.products.count - 1, section: 0)], withRowAnimation: true)
             }
         }
     }

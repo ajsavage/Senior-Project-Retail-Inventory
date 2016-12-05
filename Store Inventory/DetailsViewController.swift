@@ -67,11 +67,11 @@ class DetailsViewController: ShowProductViewController {
     
     // Sets the choose size button title to the selected size on the action sheet
     func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
-        if (actionSheet.tag == Constants.Sizes.menuTag) {
+        if (actionSheet.tag == Constants.Sizes.MenuTag) {
             actionSheetButtonClicked(actionSheet, buttonIndex: buttonIndex, view: chooseSizeLabel)
             inStockLabel.text = calculateStock
         }
-        else if (actionSheet.tag == Constants.Colors.menuTag) {
+        else if (actionSheet.tag == Constants.Colors.MenuTag) {
             actionSheetButtonClicked(actionSheet, buttonIndex: buttonIndex, view: chooseColorLabel)
         }
     }

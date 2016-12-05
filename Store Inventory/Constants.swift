@@ -15,7 +15,7 @@ class Constants: NSObject {
     
     struct Types {
         static let Names = ["Shirt", "Pants", "Dress"]
-        static let menuTag = 3
+        static let MenuTag = 3
         static let Filters = ["Shirt", "Pants", "Dress", "All"]
     }
     
@@ -26,17 +26,21 @@ class Constants: NSObject {
         static let Large = 3
         static let XLarge = 4
      
-        static let menuTag = 1
+        static let MenuTag = 1
         
         static let Names = ["XSmall", "Small", "Medium", "Large", "XLarge"]
     }
     
     struct Colors {
-        static let menuTag = 2
+        static let MenuTag = 2
         static let Names = ["White", "Gray", "Black", "Pink", "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Brown"]
     }
     
     struct Description {
-        static let fieldTag = 5
+        static let FieldTag = 5
+    }
+    
+    struct Paging {
+        static let ItemNumber = 15
     }
 }

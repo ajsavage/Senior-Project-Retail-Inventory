@@ -24,7 +24,7 @@ class ShowProductViewController: Helper, UIActionSheetDelegate, UIAlertViewDeleg
                                                  cancelButtonTitle: nil,
                                                  destructiveButtonTitle: nil,
                                                  otherButtonTitles: "All")
-        sheet.tag = Constants.Colors.menuTag
+        sheet.tag = Constants.Colors.MenuTag
         cancelColorIndex = 1 // All and Cancel buttons
         
         for newColor in currentProduct.colors {
@@ -40,7 +40,7 @@ class ShowProductViewController: Helper, UIActionSheetDelegate, UIAlertViewDeleg
         let sheet: UIActionSheet = UIActionSheet()
         sheet.title = "Current Product Colors"
         sheet.delegate = self
-        sheet.tag = Constants.Colors.menuTag
+        sheet.tag = Constants.Colors.MenuTag
         
         // Add New Color button
         sheet.addButtonWithTitle("✚ Add New Color")
@@ -67,7 +67,7 @@ class ShowProductViewController: Helper, UIActionSheetDelegate, UIAlertViewDeleg
                                                  cancelButtonTitle: nil,
                                                  destructiveButtonTitle: nil,
                                                  otherButtonTitles: "All")
-        sheet.tag = Constants.Sizes.menuTag
+        sheet.tag = Constants.Sizes.MenuTag
         cancelSizeIndex = 1
         
         for newSize in Constants.Sizes.Names {
@@ -86,7 +86,7 @@ class ShowProductViewController: Helper, UIActionSheetDelegate, UIAlertViewDeleg
                                                  delegate: self,
                                                  cancelButtonTitle: nil,
                                                  destructiveButtonTitle: nil)
-        sheet.tag = Constants.Types.menuTag
+        sheet.tag = Constants.Types.MenuTag
         
         for newType in Constants.Types.Names {
             sheet.addButtonWithTitle(newType)
@@ -108,20 +108,20 @@ class ShowProductViewController: Helper, UIActionSheetDelegate, UIAlertViewDeleg
     
     func actionSheetButtonClicked(actionSheet: UIActionSheet, buttonIndex: Int, view: UILabel) {
         // Size ActionSheet
-        if (actionSheet.tag == Constants.Sizes.menuTag) {
+        if (actionSheet.tag == Constants.Sizes.MenuTag) {
             if (buttonIndex != cancelSizeIndex) {
                 sizeIndex = buttonIndex - 1
                 view.text = actionSheet.buttonTitleAtIndex(buttonIndex)
             }
         }
         // Color ActionSheet
-        else if (actionSheet.tag == Constants.Colors.menuTag) {
+        else if (actionSheet.tag == Constants.Colors.MenuTag) {
             if (buttonIndex != cancelColorIndex) {
                 view.text = actionSheet.buttonTitleAtIndex(buttonIndex)
             }
         }
         // Type ActionSheet
-        else if (actionSheet.tag == Constants.Types.menuTag) {
+        else if (actionSheet.tag == Constants.Types.MenuTag) {
             if (buttonIndex != Constants.Types.Names.count) {
                 typeName = actionSheet.buttonTitleAtIndex(buttonIndex)!
                 view.text = "Type: \(typeName)"
