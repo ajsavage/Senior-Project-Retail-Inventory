@@ -33,7 +33,7 @@ class Product: NSObject {
     }
     
     // Creates a new product
-    init(dict: NSDictionary) {
+    init(dict: NSDictionary, newImage: UIImage?) {
         super.init()
         
         _selfRef = FIRDatabase.database().reference().child("inventory").child(_id as String)
@@ -43,12 +43,15 @@ class Product: NSObject {
         _detailsRef = Details(dictionary: dict)
         _dictionary = dict
         
-        if (dict["Image"] == nil) {
+        if (newImage == nil) {
             _image = UIImage(named: "DefaultImage")
         }
         else {
-            getImageFromStorage(loadProductToDatabase)
+            _image = newImage
         }
+        
+        loadProductToDatabase()
+        saveImage(_image, callback: noCallback)
     }
     
     // Creates a product from the given snapshot information
@@ -81,7 +84,6 @@ class Product: NSObject {
     
     private func loadProductToDatabase() {
         let mutDictionary: NSMutableDictionary = _dictionary.mutableCopy() as! NSMutableDictionary
-        mutDictionary.removeObjectForKey("Image")
         mutDictionary.removeObjectForKey("ID")
         
         // sets the _selfRef location in the database to the current dictionary

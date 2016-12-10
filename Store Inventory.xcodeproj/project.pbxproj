@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8899E4BFEAE4E122C72A53AB /* Pods_Store_InventoryTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F4B98FD606F3A163C8611C5 /* Pods_Store_InventoryTests.framework */; };
 		9900EED11DC3FD4D006F1CDC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9900EED01DC3FD4D006F1CDC /* AVFoundation.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		9900EEE21DC4244E006F1CDC /* ScanInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9900EEE11DC4244E006F1CDC /* ScanInViewController.swift */; };
 		9937A67F1DC9E4FF0002F11F /* NewAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9937A67E1DC9E4FF0002F11F /* NewAccountViewController.swift */; };
 		9937A6811DC9E50B0002F11F /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9937A6801DC9E50B0002F11F /* LoginViewController.swift */; };
 		9942A1B81DF4C57800204B88 /* AddNewColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9942A1B71DF4C57800204B88 /* AddNewColorViewController.swift */; };
+		99480B0F1DF5E048007062FC /* SelectImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99480B0E1DF5E048007062FC /* SelectImageViewController.swift */; };
 		99562DFC1DC7279A0003A016 /* BarcodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99562DFB1DC7279A0003A016 /* BarcodeScanner.swift */; };
 		9961FC411DBE4504004AA9BE /* EditPagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9961FC401DBE4504004AA9BE /* EditPagesViewController.swift */; };
 		9961FC431DBE567C004AA9BE /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9961FC421DBE567C004AA9BE /* Constants.swift */; };
@@ -32,6 +34,7 @@
 		99BC70681DAB0580007AA01F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 99BC70661DAB0580007AA01F /* GoogleService-Info.plist */; };
 		99BC70691DAB0580007AA01F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 99BC70661DAB0580007AA01F /* GoogleService-Info.plist */; };
 		99D2975B1DBA0562007AD05A /* Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D2975A1DBA0562007AD05A /* Details.swift */; };
+		99EE7B351DF55C6100424A3B /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EE7B341DF55C6100424A3B /* ColorPickerViewController.swift */; };
 		99F278A01DAB65F600251DB2 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F2789F1DAB65F600251DB2 /* Product.swift */; };
 		99F278A21DAB9DD300251DB2 /* ProductTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F278A11DAB9DD300251DB2 /* ProductTableViewCell.swift */; };
 		99F278A41DABA22800251DB2 /* ProductTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F278A31DABA22800251DB2 /* ProductTableViewController.swift */; };
@@ -39,6 +42,7 @@
 		99FC399A1DE2E22800CCF211 /* StoreInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC39991DE2E22800CCF211 /* StoreInfoViewController.swift */; };
 		99FFDA911DAECF7700634ECD /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FFDA901DAECF7700634ECD /* SettingsViewController.swift */; };
 		EFFD408C7BD5CD17BFC8AC99 /* Pods_Store_Inventory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA81C73510F0DA6F585C3BCB /* Pods_Store_Inventory.framework */; };
+		F189DA9843B02BE53DFD5FF2 /* Pods_Store_InventoryUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B154EB849AC1BE9B74062ED1 /* Pods_Store_InventoryUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +66,7 @@
 		21A4E9DEB781650B3C0977AB /* Pods-Store InventoryUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Store InventoryUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Store InventoryUITests/Pods-Store InventoryUITests.release.xcconfig"; sourceTree = "<group>"; };
 		427ED8FA0E0661A6E9E7CA48 /* Pods-Store InventoryTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Store InventoryTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Store InventoryTests/Pods-Store InventoryTests.debug.xcconfig"; sourceTree = "<group>"; };
 		67D2F75B019E87E8E418907D /* Pods-Store Inventory.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Store Inventory.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Store Inventory/Pods-Store Inventory.debug.xcconfig"; sourceTree = "<group>"; };
+		6F4B98FD606F3A163C8611C5 /* Pods_Store_InventoryTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Store_InventoryTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		86AAE3152C32188759557C85 /* Pods-Store InventoryTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Store InventoryTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Store InventoryTests/Pods-Store InventoryTests.release.xcconfig"; sourceTree = "<group>"; };
 		9900EED01DC3FD4D006F1CDC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		9900EED81DC3FDBC006F1CDC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -69,6 +74,7 @@
 		9937A67E1DC9E4FF0002F11F /* NewAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewAccountViewController.swift; sourceTree = "<group>"; };
 		9937A6801DC9E50B0002F11F /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		9942A1B71DF4C57800204B88 /* AddNewColorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewColorViewController.swift; sourceTree = "<group>"; };
+		99480B0E1DF5E048007062FC /* SelectImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectImageViewController.swift; sourceTree = "<group>"; };
 		994CDBBF1DCC25DB0012203E /* Store Inventory-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Store Inventory-Bridging-Header.h"; sourceTree = "<group>"; };
 		99562DFB1DC7279A0003A016 /* BarcodeScanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarcodeScanner.swift; sourceTree = "<group>"; };
 		9961FC401DBE4504004AA9BE /* EditPagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPagesViewController.swift; sourceTree = "<group>"; };
@@ -95,6 +101,7 @@
 		99BC70661DAB0580007AA01F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		99D297461DB9F1C7007AD05A /* Firebase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Firebase.h; path = Pods/Firebase/Core/Sources/Firebase.h; sourceTree = "<group>"; };
 		99D2975A1DBA0562007AD05A /* Details.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Details.swift; sourceTree = "<group>"; };
+		99EE7B341DF55C6100424A3B /* ColorPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPickerViewController.swift; sourceTree = "<group>"; };
 		99F2789F1DAB65F600251DB2 /* Product.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		99F278A11DAB9DD300251DB2 /* ProductTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductTableViewCell.swift; sourceTree = "<group>"; };
 		99F278A31DABA22800251DB2 /* ProductTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductTableViewController.swift; sourceTree = "<group>"; };
@@ -102,6 +109,7 @@
 		99FC39991DE2E22800CCF211 /* StoreInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreInfoViewController.swift; sourceTree = "<group>"; };
 		99FFDA901DAECF7700634ECD /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		ADF392300AD617DD84BA0583 /* Pods-Store InventoryUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Store InventoryUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Store InventoryUITests/Pods-Store InventoryUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		B154EB849AC1BE9B74062ED1 /* Pods_Store_InventoryUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Store_InventoryUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E28778C1525AB24051AF2AEB /* Pods-Store Inventory.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Store Inventory.release.xcconfig"; path = "Pods/Target Support Files/Pods-Store Inventory/Pods-Store Inventory.release.xcconfig"; sourceTree = "<group>"; };
 		EA81C73510F0DA6F585C3BCB /* Pods_Store_Inventory.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Store_Inventory.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -121,6 +129,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8899E4BFEAE4E122C72A53AB /* Pods_Store_InventoryTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,6 +137,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F189DA9843B02BE53DFD5FF2 /* Pods_Store_InventoryUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,6 +164,8 @@
 				9900EED01DC3FD4D006F1CDC /* AVFoundation.framework */,
 				99D297461DB9F1C7007AD05A /* Firebase.h */,
 				EA81C73510F0DA6F585C3BCB /* Pods_Store_Inventory.framework */,
+				6F4B98FD606F3A163C8611C5 /* Pods_Store_InventoryTests.framework */,
+				B154EB849AC1BE9B74062ED1 /* Pods_Store_InventoryUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -215,11 +227,10 @@
 			isa = PBXGroup;
 			children = (
 				99BC70361DAB00D9007AA01F /* Main.storyboard */,
-				99562DFB1DC7279A0003A016 /* BarcodeScanner.swift */,
-				9988F3E71DEA625E000AB5E0 /* Helper.swift */,
 				9961FC421DBE567C004AA9BE /* Constants.swift */,
 				99F2789F1DAB65F600251DB2 /* Product.swift */,
 				99D2975A1DBA0562007AD05A /* Details.swift */,
+				99EE7B361DF55D2D00424A3B /* Specialized Views */,
 				9937A6841DC9E53A0002F11F /* User Management */,
 				9971285B1DD4131C00EDB6DB /* Manager Views */,
 				9900EECF1DC3FCD0006F1CDC /* Employee Views */,
@@ -250,6 +261,17 @@
 				99BC70541DAB00D9007AA01F /* Info.plist */,
 			);
 			path = "Store InventoryUITests";
+			sourceTree = "<group>";
+		};
+		99EE7B361DF55D2D00424A3B /* Specialized Views */ = {
+			isa = PBXGroup;
+			children = (
+				99480B0E1DF5E048007062FC /* SelectImageViewController.swift */,
+				9988F3E71DEA625E000AB5E0 /* Helper.swift */,
+				99562DFB1DC7279A0003A016 /* BarcodeScanner.swift */,
+				99EE7B341DF55C6100424A3B /* ColorPickerViewController.swift */,
+			);
+			name = "Specialized Views";
 			sourceTree = "<group>";
 		};
 		99FFDA8F1DAECDC500634ECD /* Customer Views */ = {
@@ -551,6 +573,7 @@
 				99F278A21DAB9DD300251DB2 /* ProductTableViewCell.swift in Sources */,
 				9988F3EA1DEB3611000AB5E0 /* AddProductViewController.swift in Sources */,
 				9961FC451DBEC10B004AA9BE /* ShowProductViewController.swift in Sources */,
+				99EE7B351DF55C6100424A3B /* ColorPickerViewController.swift in Sources */,
 				997746031DBA329B00AB7279 /* ProductCollectionViewCell.swift in Sources */,
 				99FFDA911DAECF7700634ECD /* SettingsViewController.swift in Sources */,
 				9900EEE21DC4244E006F1CDC /* ScanInViewController.swift in Sources */,
@@ -566,6 +589,7 @@
 				99F278A41DABA22800251DB2 /* ProductTableViewController.swift in Sources */,
 				9937A6811DC9E50B0002F11F /* LoginViewController.swift in Sources */,
 				99F278A61DABDF0300251DB2 /* DetailsViewController.swift in Sources */,
+				99480B0F1DF5E048007062FC /* SelectImageViewController.swift in Sources */,
 				9961FC431DBE567C004AA9BE /* Constants.swift in Sources */,
 				9937A67F1DC9E4FF0002F11F /* NewAccountViewController.swift in Sources */,
 			);
@@ -718,7 +742,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = "Store Inventory/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -745,7 +769,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = "Store Inventory/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

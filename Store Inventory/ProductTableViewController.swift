@@ -226,7 +226,7 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
         navigationTitle.title = "Hi \(prefs.stringForKey("USERNAME"))!"
         
         // Set back button title
-        let backButton = UIBarButtonItem.init(title: "Home", style: UIBarButtonItemStyle.Bordered, target: nil, action: nil)
+        let backButton = UIBarButtonItem.init(title: "Home", style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
         self.navigationItem.backBarButtonItem = backButton
         
         dataRef.child("inventory").observeSingleEventOfType(.Value, withBlock: { snapshot in

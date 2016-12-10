@@ -34,7 +34,9 @@ class AddProductViewController: Helper {
     
     // Button actions
     @IBAction func editImageButtonPushed(sender: AnyObject) {
-        
+     //   let selectImageView = SelectImageViewController()
+       // selectImageView.delegate = self
+        //self.presentViewController(selectImageView, animated: true, completion: nil)
     }
     
     @IBAction func cancelButtonPushed(sender: AnyObject) {
@@ -185,12 +187,13 @@ class AddProductViewController: Helper {
         dictionary["Description"] = temp
         
         // Image
+        var myImage: UIImage?
+        
         if (imageView.image != nil) {
-            dictionary["Image"] = dictionary["ID"]
-            UPLOAD
+            myImage = imageView.image
         }
         else {
-            dictionary["Image"] = nil
+            myImage = nil
         }
         
         if (colorView.subviews.count == 0) {
@@ -202,7 +205,7 @@ class AddProductViewController: Helper {
             dictionary["Sizes"] = sizeDictionary
         }
         
-        product = Product(dict: dictionary)
+        product = Product(dict: dictionary, newImage: myImage)
         
         indicator?.removeFromSuperview()
         navigationController?.popViewControllerAnimated(true)
@@ -218,6 +221,16 @@ class AddProductViewController: Helper {
         sizeDictionary["Medium"] = 0
         sizeDictionary["Large"] = 0
         sizeDictionary["XLarge"] = 0
+        
+        // Add dismissing keyboard by tapping
+        let dismissTap = UITapGestureRecognizer(target: self, action: #selector(AddProductViewController.dismissKeyboard))
+        dismissTap.cancelsTouchesInView = false
+        view.addGestureRecognizer(dismissTap)
+    }
+    
+    // For Keyboard dismissal
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     func showSaveErrorAlert(message: String) {
@@ -232,6 +245,33 @@ class AddProductViewController: Helper {
         indicator?.removeFromSuperview()
         errorAlert.tag = -1
         errorAlert.show()
+    }
+    
+    // Helper to move description text field up when clicked and
+    // covered by the keyboard
+    private func animateDescriptionScrollView(view: UIScrollView, distanceLength: Int, up: Bool) {
+        let duration = 0.3
+        let distance = CGFloat(distanceLength) * (up ? 1 : -1)
+        
+        UIView.beginAnimations("animateDescriptionScrollView", context: nil)
+        UIView.setAnimationBeginsFromCurrentState(true)
+        UIView.setAnimationDuration(duration)
+        self.view.frame = CGRectOffset(self.view.frame, 0, distance)
+        UIView.commitAnimations()
+    }
+    
+    // Called when a textView is selected for editing
+    func textViewDidBeginEditing(textView: UITextView) {
+        if (textView.tag == Constants.Description.FieldTag) {
+            animateDescriptionScrollView(descriptionField, distanceLength: -150, up: true)
+        }
+    }
+    
+    // Called when a textView is being edited and the Return key is pushed
+    func textViewDidEndEditing(textView: UITextView) {
+        if (textView.tag == Constants.Description.FieldTag) {
+            animateDescriptionScrollView(descriptionField, distanceLength: -150, up: false)
+        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
