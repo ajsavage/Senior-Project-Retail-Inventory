@@ -17,7 +17,8 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet weak var filterButton: UIButton!
     @IBOutlet weak var filterView: UIView!
     @IBOutlet weak var loadingSymbolLabel: UILabel!
-    
+    @IBOutlet weak var grayedOutBackground: UIButton!
+  
     // Price Properties
     @IBOutlet weak var maxPriceLabel: UILabel!
     @IBOutlet weak var priceSlider: UISlider!
@@ -50,10 +51,12 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
     // Button Actions
     @IBAction func cancelButton(sender: UIButton) {
         filterView.hidden = true
+        grayedOutBackground.hidden = true
     }
     
     @IBAction func openFilterMenu(sender: UIButton) {
         filterView.hidden = false
+        grayedOutBackground.hidden = false
     }
     
     @IBAction func allColorsButton(sender: UIButton) {
@@ -108,9 +111,9 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
             }
             
             let colorSet = Set(searchColors)
-            self.productSearchResults = self.productSearchResults.filter() {
-                !colorSet.intersect(($0 as Product).colors).isEmpty
-            }
+ //           self.productSearchResults = self.productSearchResults.filter() {
+       //         !colorSet.intersect(($0 as Product).colors).isEmpty
+   //         }
         }
         
         // Notify user if there are no found products
@@ -167,6 +170,7 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
     private func setupFiltersMenu() {
         // hide filters menu
         filterView.hidden = true
+        grayedOutBackground.hidden = true
         
         // price slider with max price
         var maxPrice: Float = 150
@@ -223,7 +227,7 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
         setupFiltersMenu()
         
         // Greet user in title
-        navigationTitle.title = "Hi \(prefs.stringForKey("USERNAME"))!"
+        //    navigationTitle.title = "Hi \(prefs.stringForKey("USERNAME"))!"
         
         // Set back button title
         let backButton = UIBarButtonItem.init(title: "Home", style: UIBarButtonItemStyle.Plain, target: nil, action: nil)

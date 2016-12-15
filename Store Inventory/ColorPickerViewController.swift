@@ -2,7 +2,7 @@
 //  ColorPickerViewController.swift
 //  Store Inventory
 //
-//  Created by Andrea Savage on 12/5/16.
+//  Created by Andrea Savage on 12/13/16.
 //  Copyright © 2016 Andrea Savage. All rights reserved.
 //
 
@@ -10,32 +10,29 @@ import UIKit
 import SwiftHSVColorPicker
 
 class ColorPickerViewController: UIViewController {
-    //Properties
-    @IBOutlet weak var mainView: UIView!
+    // Properties
+    @IBOutlet var mainView: UIView!
     
-    // Delegate to whom to give the chosen color
-    var delegate: AddNewColorViewController?
+    // SwiftHSVColorPicker that allows the user to choose a color
+    var colorPicker: SwiftHSVColorPicker? = nil
     
-    // Color Picker view
-    var colorPicker: SwiftHSVColorPicker?
+    // Delegate to return selected color to
+    var delegate: AddNewColorViewController? = nil
     
-    // Button Actions
-    @IBAction func SelectButtonPushed(sender: AnyObject) {
-        delegate?.chosenColor = colorPicker?.color
+    // Button Actions  
+    @IBAction func selectButtonClicked(sender: AnyObject) {
+        if delegate != nil && colorPicker != nil {
+            delegate?.newSelectedColor(colorPicker!.color)
+        }
+        
         navigationController?.popViewControllerAnimated(true)
     }
-    
-    @IBAction func cancelButtonPushed(sender: AnyObject) {
-        navigationController?.popViewControllerAnimated(true)
-    }
-    
+
     override func viewDidLoad() {
+        super.viewDidLoad()
         colorPicker = SwiftHSVColorPicker(frame: CGRectMake(10, 20, 300, 400))
-        colorPicker!.setViewColor(UIColor.blueColor())
-        
-        // Forces the views to load
-        _ = self.view
-        
         mainView.addSubview(colorPicker!)
+        
+        colorPicker!.setViewColor(UIColor.blueColor())
     }
-   }
+}

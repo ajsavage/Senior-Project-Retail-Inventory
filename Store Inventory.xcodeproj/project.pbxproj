@@ -18,8 +18,8 @@
 		9961FC411DBE4504004AA9BE /* EditPagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9961FC401DBE4504004AA9BE /* EditPagesViewController.swift */; };
 		9961FC431DBE567C004AA9BE /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9961FC421DBE567C004AA9BE /* Constants.swift */; };
 		9961FC451DBEC10B004AA9BE /* ShowProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9961FC441DBEC10B004AA9BE /* ShowProductViewController.swift */; };
-		997746011DBA316200AB7279 /* ProductCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997746001DBA316200AB7279 /* ProductCollectionViewController.swift */; };
-		997746031DBA329B00AB7279 /* ProductCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997746021DBA329B00AB7279 /* ProductCollectionViewCell.swift */; };
+		997703E01E0018CB000734C8 /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997703DF1E0018CB000734C8 /* ColorPickerViewController.swift */; };
+		997703E21E00DD98000734C8 /* ColorInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997703E11E00DD98000734C8 /* ColorInventory.swift */; };
 		9988F3E81DEA625E000AB5E0 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9988F3E71DEA625E000AB5E0 /* Helper.swift */; };
 		9988F3EA1DEB3611000AB5E0 /* AddProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9988F3E91DEB3611000AB5E0 /* AddProductViewController.swift */; };
 		99BC70331DAB00D9007AA01F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BC70321DAB00D9007AA01F /* AppDelegate.swift */; };
@@ -34,11 +34,15 @@
 		99BC70681DAB0580007AA01F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 99BC70661DAB0580007AA01F /* GoogleService-Info.plist */; };
 		99BC70691DAB0580007AA01F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 99BC70661DAB0580007AA01F /* GoogleService-Info.plist */; };
 		99D2975B1DBA0562007AD05A /* Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D2975A1DBA0562007AD05A /* Details.swift */; };
-		99EE7B351DF55C6100424A3B /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EE7B341DF55C6100424A3B /* ColorPickerViewController.swift */; };
 		99F278A01DAB65F600251DB2 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F2789F1DAB65F600251DB2 /* Product.swift */; };
 		99F278A21DAB9DD300251DB2 /* ProductTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F278A11DAB9DD300251DB2 /* ProductTableViewCell.swift */; };
 		99F278A41DABA22800251DB2 /* ProductTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F278A31DABA22800251DB2 /* ProductTableViewController.swift */; };
 		99F278A61DABDF0300251DB2 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F278A51DABDF0300251DB2 /* DetailsViewController.swift */; };
+		99FAB3D01E02602700E7D035 /* UpdateStoreInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FAB3CF1E02602700E7D035 /* UpdateStoreInfoViewController.swift */; };
+		99FAB3D21E02604300E7D035 /* EditEmployeesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FAB3D11E02604300E7D035 /* EditEmployeesViewController.swift */; };
+		99FAB3D41E02605700E7D035 /* EditProductColorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FAB3D31E02605700E7D035 /* EditProductColorsViewController.swift */; };
+		99FAB3D61E026BE400E7D035 /* checkoutInventoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FAB3D51E026BE400E7D035 /* checkoutInventoryViewController.swift */; };
+		99FAB3D81E02703600E7D035 /* EmployeeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FAB3D71E02703600E7D035 /* EmployeeTableViewCell.swift */; };
 		99FC399A1DE2E22800CCF211 /* StoreInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC39991DE2E22800CCF211 /* StoreInfoViewController.swift */; };
 		99FFDA911DAECF7700634ECD /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FFDA901DAECF7700634ECD /* SettingsViewController.swift */; };
 		EFFD408C7BD5CD17BFC8AC99 /* Pods_Store_Inventory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA81C73510F0DA6F585C3BCB /* Pods_Store_Inventory.framework */; };
@@ -80,8 +84,8 @@
 		9961FC401DBE4504004AA9BE /* EditPagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPagesViewController.swift; sourceTree = "<group>"; };
 		9961FC421DBE567C004AA9BE /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9961FC441DBEC10B004AA9BE /* ShowProductViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowProductViewController.swift; sourceTree = "<group>"; };
-		997746001DBA316200AB7279 /* ProductCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCollectionViewController.swift; sourceTree = "<group>"; };
-		997746021DBA329B00AB7279 /* ProductCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCollectionViewCell.swift; sourceTree = "<group>"; };
+		997703DF1E0018CB000734C8 /* ColorPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPickerViewController.swift; sourceTree = "<group>"; };
+		997703E11E00DD98000734C8 /* ColorInventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorInventory.swift; sourceTree = "<group>"; };
 		9988F3E71DEA625E000AB5E0 /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		9988F3E91DEB3611000AB5E0 /* AddProductViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddProductViewController.swift; sourceTree = "<group>"; };
 		99BC702F1DAB00D9007AA01F /* Store Inventory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Store Inventory.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,11 +105,15 @@
 		99BC70661DAB0580007AA01F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		99D297461DB9F1C7007AD05A /* Firebase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Firebase.h; path = Pods/Firebase/Core/Sources/Firebase.h; sourceTree = "<group>"; };
 		99D2975A1DBA0562007AD05A /* Details.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Details.swift; sourceTree = "<group>"; };
-		99EE7B341DF55C6100424A3B /* ColorPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPickerViewController.swift; sourceTree = "<group>"; };
 		99F2789F1DAB65F600251DB2 /* Product.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		99F278A11DAB9DD300251DB2 /* ProductTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductTableViewCell.swift; sourceTree = "<group>"; };
 		99F278A31DABA22800251DB2 /* ProductTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductTableViewController.swift; sourceTree = "<group>"; };
 		99F278A51DABDF0300251DB2 /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
+		99FAB3CF1E02602700E7D035 /* UpdateStoreInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateStoreInfoViewController.swift; sourceTree = "<group>"; };
+		99FAB3D11E02604300E7D035 /* EditEmployeesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditEmployeesViewController.swift; sourceTree = "<group>"; };
+		99FAB3D31E02605700E7D035 /* EditProductColorsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProductColorsViewController.swift; sourceTree = "<group>"; };
+		99FAB3D51E026BE400E7D035 /* checkoutInventoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = checkoutInventoryViewController.swift; sourceTree = "<group>"; };
+		99FAB3D71E02703600E7D035 /* EmployeeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmployeeTableViewCell.swift; sourceTree = "<group>"; };
 		99FC39991DE2E22800CCF211 /* StoreInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreInfoViewController.swift; sourceTree = "<group>"; };
 		99FFDA901DAECF7700634ECD /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		ADF392300AD617DD84BA0583 /* Pods-Store InventoryUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Store InventoryUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Store InventoryUITests/Pods-Store InventoryUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -175,6 +183,7 @@
 			children = (
 				9900EEE11DC4244E006F1CDC /* ScanInViewController.swift */,
 				9961FC441DBEC10B004AA9BE /* ShowProductViewController.swift */,
+				99FAB3D51E026BE400E7D035 /* checkoutInventoryViewController.swift */,
 				9961FC401DBE4504004AA9BE /* EditPagesViewController.swift */,
 			);
 			name = "Employee Views";
@@ -193,7 +202,11 @@
 		9971285B1DD4131C00EDB6DB /* Manager Views */ = {
 			isa = PBXGroup;
 			children = (
+				99FAB3D31E02605700E7D035 /* EditProductColorsViewController.swift */,
+				99FAB3D11E02604300E7D035 /* EditEmployeesViewController.swift */,
+				99FAB3CF1E02602700E7D035 /* UpdateStoreInfoViewController.swift */,
 				9942A1B71DF4C57800204B88 /* AddNewColorViewController.swift */,
+				99FAB3D71E02703600E7D035 /* EmployeeTableViewCell.swift */,
 				9988F3E91DEB3611000AB5E0 /* AddProductViewController.swift */,
 			);
 			name = "Manager Views";
@@ -229,7 +242,9 @@
 				99BC70361DAB00D9007AA01F /* Main.storyboard */,
 				9961FC421DBE567C004AA9BE /* Constants.swift */,
 				99F2789F1DAB65F600251DB2 /* Product.swift */,
+				997703E11E00DD98000734C8 /* ColorInventory.swift */,
 				99D2975A1DBA0562007AD05A /* Details.swift */,
+				9988F3E71DEA625E000AB5E0 /* Helper.swift */,
 				99EE7B361DF55D2D00424A3B /* Specialized Views */,
 				9937A6841DC9E53A0002F11F /* User Management */,
 				9971285B1DD4131C00EDB6DB /* Manager Views */,
@@ -266,10 +281,9 @@
 		99EE7B361DF55D2D00424A3B /* Specialized Views */ = {
 			isa = PBXGroup;
 			children = (
+				997703DF1E0018CB000734C8 /* ColorPickerViewController.swift */,
 				99480B0E1DF5E048007062FC /* SelectImageViewController.swift */,
-				9988F3E71DEA625E000AB5E0 /* Helper.swift */,
 				99562DFB1DC7279A0003A016 /* BarcodeScanner.swift */,
-				99EE7B341DF55C6100424A3B /* ColorPickerViewController.swift */,
 			);
 			name = "Specialized Views";
 			sourceTree = "<group>";
@@ -278,9 +292,7 @@
 			isa = PBXGroup;
 			children = (
 				99FC39991DE2E22800CCF211 /* StoreInfoViewController.swift */,
-				997746021DBA329B00AB7279 /* ProductCollectionViewCell.swift */,
 				99F278A51DABDF0300251DB2 /* DetailsViewController.swift */,
-				997746001DBA316200AB7279 /* ProductCollectionViewController.swift */,
 				99F278A31DABA22800251DB2 /* ProductTableViewController.swift */,
 				99F278A11DAB9DD300251DB2 /* ProductTableViewCell.swift */,
 			);
@@ -573,25 +585,29 @@
 				99F278A21DAB9DD300251DB2 /* ProductTableViewCell.swift in Sources */,
 				9988F3EA1DEB3611000AB5E0 /* AddProductViewController.swift in Sources */,
 				9961FC451DBEC10B004AA9BE /* ShowProductViewController.swift in Sources */,
-				99EE7B351DF55C6100424A3B /* ColorPickerViewController.swift in Sources */,
-				997746031DBA329B00AB7279 /* ProductCollectionViewCell.swift in Sources */,
+				99FAB3D41E02605700E7D035 /* EditProductColorsViewController.swift in Sources */,
 				99FFDA911DAECF7700634ECD /* SettingsViewController.swift in Sources */,
 				9900EEE21DC4244E006F1CDC /* ScanInViewController.swift in Sources */,
 				9942A1B81DF4C57800204B88 /* AddNewColorViewController.swift in Sources */,
 				99FC399A1DE2E22800CCF211 /* StoreInfoViewController.swift in Sources */,
 				99F278A01DAB65F600251DB2 /* Product.swift in Sources */,
+				99FAB3D21E02604300E7D035 /* EditEmployeesViewController.swift in Sources */,
 				9988F3E81DEA625E000AB5E0 /* Helper.swift in Sources */,
 				9961FC411DBE4504004AA9BE /* EditPagesViewController.swift in Sources */,
-				997746011DBA316200AB7279 /* ProductCollectionViewController.swift in Sources */,
+				997703E21E00DD98000734C8 /* ColorInventory.swift in Sources */,
 				99562DFC1DC7279A0003A016 /* BarcodeScanner.swift in Sources */,
+				997703E01E0018CB000734C8 /* ColorPickerViewController.swift in Sources */,
 				99BC70331DAB00D9007AA01F /* AppDelegate.swift in Sources */,
 				99D2975B1DBA0562007AD05A /* Details.swift in Sources */,
 				99F278A41DABA22800251DB2 /* ProductTableViewController.swift in Sources */,
+				99FAB3D01E02602700E7D035 /* UpdateStoreInfoViewController.swift in Sources */,
+				99FAB3D81E02703600E7D035 /* EmployeeTableViewCell.swift in Sources */,
 				9937A6811DC9E50B0002F11F /* LoginViewController.swift in Sources */,
 				99F278A61DABDF0300251DB2 /* DetailsViewController.swift in Sources */,
 				99480B0F1DF5E048007062FC /* SelectImageViewController.swift in Sources */,
 				9961FC431DBE567C004AA9BE /* Constants.swift in Sources */,
 				9937A67F1DC9E4FF0002F11F /* NewAccountViewController.swift in Sources */,
+				99FAB3D61E026BE400E7D035 /* checkoutInventoryViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

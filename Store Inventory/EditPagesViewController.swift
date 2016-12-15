@@ -9,24 +9,48 @@
 import UIKit
 import Firebase
 
-class EditPagesViewController: ShowProductViewController {
+class EditPagesViewController: ShowProductViewController, selectImageCommunicator {
     // Product Viewing Elements
     @IBOutlet var titleLabel: UITextView!
     @IBOutlet var priceLabel: UITextField!
     @IBOutlet var descriptionLabel: UITextView!
-    @IBOutlet var inStockLabel: UILabel!
     @IBOutlet var imageLabel: UIImageView!
-    
+    @IBOutlet weak var typeSegControl: UISegmentedControl!
     @IBOutlet var overallScrollView: UIScrollView!
     @IBOutlet var searchField: UITextField!
     @IBOutlet var descriptionScrollView: UIScrollView!
     @IBOutlet var saveButton: UIButton!
+    
+    @IBOutlet weak var colorScrollView: UIScrollView!
+    @IBOutlet var totalSizeLabels: [UILabel]!
+    
+    // Color Swatch View Properties
+    let colorSwatchHeight = 37
+    let colorSwatchWidth = 45
+    var nextXValue = 0
+    var nextYValue = 0
     
     // Temporary colors array
     var newColors = [NSString]()
     
     // If the image was updated
     var imageChanged = false
+    
+    @IBAction func editImageClicked(sender: AnyObject) {
+        showLoadingSymbol(imageLabel)
+        let imagePicker = storyboard?.instantiateViewControllerWithIdentifier("ImagePicker") as! SelectImageViewController
+        imagePicker.delegate = self
+        navigationController?.pushViewController(imagePicker, animated: true)
+    }
+    
+    // Callback for the selectImageView
+    func selectedImageCallback(image: UIImage?) {
+        indicator?.removeFromSuperview()
+        
+        if (image != nil) {
+            imageLabel.image = image
+        }
+    }
     
     @IBAction func searchFieldClicked(sender: AnyObject) {
         if (self.isBeingDismissed()) {
@@ -61,16 +85,16 @@ class EditPagesViewController: ShowProductViewController {
     }
     
     // Called when a textView is selected for editing
-    func textViewDidBeginEditing(textView: UITextView) {
+    override func textViewDidBeginEditing(textView: UITextView) {
         if (textView.tag == Constants.Description.FieldTag) {
-            animateDescriptionScrollView(descriptionScrollView, distanceLength: -200, up: true)
+            animateScrollView(descriptionScrollView, distanceLength: 200, up: true)
         }
     }
     
     // Called when a textView is being edited and the Return key is pushed
-    func textViewDidEndEditing(textView: UITextView) {
+    override func textViewDidEndEditing(textView: UITextView) {
         if (textView.tag == Constants.Description.FieldTag) {
-            animateDescriptionScrollView(descriptionScrollView, distanceLength: -200, up: false)
+            animateScrollView(descriptionScrollView, distanceLength: 200, up: false)
         }
     }
     
@@ -82,14 +106,77 @@ class EditPagesViewController: ShowProductViewController {
         imageLabel.image = currentProduct.image
         self.descriptionLabel.text = self.currentProduct.productDescription as String
         typeName = currentProduct.type as String
-        chooseTypeLabel.text = "Type: \(typeName)"
+        typeSegControl.selectedSegmentIndex = Constants.Types.Names.indexOf(typeName)!
+        
+        // Update sizes
+        var index = 0
+        
+        for label in totalSizeLabels {
+            let name = Constants.Sizes.Names[index]
+            let count = currentProduct.sizes[index]
+           
+            label.text = "\(name): \(count)"
+            index += 1
+        }
+        
+        // Update colors view
+        for color in currentProduct.colors {
+            if (color.color == nil) {
+                color.loadUIColor(FIRDatabase.database().reference(), callback: setUpSwatchView)
+            }
+            else {
+                setUpSwatchView(color.color)
+            }
+        }
         
         overallScrollView.hidden = false
         view.backgroundColor = UIColor.whiteColor()
         removeLoadingSymbol(searchField)
         searchField.text = nil
+    }
+    
+    // Sets up color swatch
+    private func setUpSwatchView(color: UIColor?) {
+        if color == nil {
+            return
+        }
         
-        inStockLabel.text = calculateStock
+        // Create new color swatch
+        let colorSwatch = UIView()
+        var addHeight = 0
+        colorSwatch.backgroundColor = color
+        colorSwatch.frame = CGRect(x: nextXValue, y: nextYValue, width: colorSwatchWidth - 2, height: colorSwatchHeight - 2)
+
+        // Add rounded border to title textview
+        colorSwatch.layer.borderColor = UIColor.lightGrayColor().CGColor
+        colorSwatch.layer.cornerRadius = 5
+        colorSwatch.layer.borderWidth = 1
+        
+        // Calculate addHeight, which is the height of a color swatch
+        // plus extras pace unless on the first row
+        if nextYValue == 0 {
+            addHeight = colorSwatchHeight
+        }
+        else {
+            addHeight = colorSwatchHeight + 10
+        }
+        
+        // Extend color view height
+        if nextXValue == 0 {
+            let currentSize = colorScrollView.contentSize
+            colorScrollView.contentSize = CGSize(width: currentSize.width, height: currentSize.height + CGFloat(addHeight))
+        }
+        
+        // Update next x and y values
+        nextXValue = nextXValue + colorSwatchWidth + 20
+        
+        // Move down to the next row if reached the end of the colorView
+        if Float(nextXValue + colorSwatchWidth) > Float(colorScrollView.bounds.width) {
+            nextXValue = 0
+            nextYValue = nextYValue + addHeight
+        }
+        
+        colorScrollView.addSubview(colorSwatch)
     }
  
     @IBAction func saveButtonClicked(sender: AnyObject) {
@@ -103,18 +190,8 @@ class EditPagesViewController: ShowProductViewController {
             currentProduct.selfRef.child("Price").setValue(price)
         }
         
-        if (chooseTypeButton.currentTitle != "Choose Type") {
-            currentProduct.selfRef.child("Type").setValue(typeName)
-        }
-        
-        // Save Colors
-        var index = 0
-        while (index < newColors.count) {
-            let color = newColors[index]
-            let realColor = newColors[index + 1]
-            
-            index += 2
-            currentProduct.selfRef.child("Colors/\(color)").setValue(realColor)
+        if (typeSegControl.selectedSegmentIndex != UISegmentedControlNoSegment) {
+            currentProduct.selfRef.child("Type").setValue(Constants.Types.Names[typeSegControl.selectedSegmentIndex])
         }
         
         // Save Image
@@ -134,140 +211,9 @@ class EditPagesViewController: ShowProductViewController {
         navigationController?.popViewControllerAnimated(true)
     }
     
-    // Type Dropdown Elements
-    @IBOutlet var chooseTypeButton: UIButton!
-    @IBOutlet var chooseTypeLabel: UILabel!
-   
-    @IBAction func typeButtonClicked(sender: AnyObject) {
-        let sheet = createTypeMenu
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad) {
-            sheet.showFromRect(sender.frame, inView: self.view, animated: true)
-        } else {
-            sheet.showInView(self.view)
-        }
-    }
-    
-    // Color Dropdown Elements
-    @IBOutlet var chooseColorLabel: UILabel!
-    @IBOutlet var chooseColorButton: UIButton!
-    
-    // Action when a user touches inside the 'Choose Color' text
-    @IBAction func colorButtonClicked(sender: AnyObject) {
-        let sheet = createEmployeeColorMenu()
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad) {
-            sheet.showFromRect(sender.frame, inView: self.view, animated: true)
-        } else {
-            sheet.showInView(self.view)
-        }
-    }
-    
-    override func colorCancelButton(sheet: UIActionSheet) {
-        var index = 1
-        while (index < newColors.count) {
-            sheet.addButtonWithTitle(newColors[index] as String)
-            index += 2
-            cancelColorIndex += 1
-        }
-        
-        // Cancel Button
-        sheet.addButtonWithTitle("Cancel")
-        sheet.cancelButtonIndex = cancelColorIndex
-    }
-    
-    // Size Dropdown Elements
-    @IBOutlet var chooseSizeLabel: UILabel!
-    @IBOutlet var chooseSizeButton: UIButton!
-  
-    // Action when a user touches inside the 'Choose Size' text
-    @IBAction func sizeButtonClicked(sender: AnyObject) {
-        let sheet = createSizeMenu
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad) {
-            sheet.showFromRect(sender.frame, inView: self.view, animated: true)
-        } else {
-            sheet.showInView(self.view)
-        }
-    }
-    
-    // Adds a new size button to the action sheet
-    override func addSizeButton(title: String, index: Int, actionSheet: UIActionSheet) {
-        actionSheet.addButtonWithTitle(title + " - \(currentProduct.sizes[index])")
-        cancelSizeIndex += 1
-    }
-    
-    
-    private func checkIndex(index: Int, alertView: UIAlertView) -> Bool {
-        let isValidColor = (alertView.textFieldAtIndex(index) != nil &&
-                            alertView.textFieldAtIndex(index)!.text != nil &&
-                            alertView.textFieldAtIndex(index)!.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) != "")
-        return isValidColor
-    }
-    
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        if (alertView.tag == Constants.Colors.MenuTag) {
-            if (checkIndex(0, alertView: alertView) && checkIndex(1, alertView: alertView)) {
-                let color: String = alertView.textFieldAtIndex(1)!.text!
-                let realColor: String = alertView.textFieldAtIndex(0)!.text!
-                
-                if (color.characters.count > 0 && realColor.characters.count > 0) {
-                    newColors.append(color.capitalizedString)
-                    newColors.append(realColor.capitalizedString)
-                }
-            }
-        }
-    }
-    
-    func createNewColorView() {
-        let errorAlert = UIAlertView()
-        errorAlert.title = "Enter New Color"
-        errorAlert.alertViewStyle = UIAlertViewStyle.LoginAndPasswordInput
-        errorAlert.tag = Constants.Colors.MenuTag
-        errorAlert.delegate = self
-        
-        errorAlert.addButtonWithTitle("OK")
-        errorAlert.addButtonWithTitle("Cancel")
-        errorAlert.dismissWithClickedButtonIndex(0, animated: true)
-        errorAlert.dismissWithClickedButtonIndex(1, animated: true)
-        
-        errorAlert.textFieldAtIndex(0)?.placeholder = "New Color"
-        errorAlert.textFieldAtIndex(1)?.placeholder = "Overview Color i.e. Wine == Red"
-        errorAlert.textFieldAtIndex(1)?.secureTextEntry = false
-        
-        errorAlert.show()
-    }
-
-    func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
-        // If is the size action sheet
-        if (actionSheet.tag == Constants.Sizes.MenuTag) {
-            // All button
-            if (buttonIndex == 0) {
-                chooseSizeLabel.text = actionSheet.buttonTitleAtIndex(buttonIndex)
-            }
-            else if (buttonIndex != cancelSizeIndex) {
-                sizeIndex = buttonIndex - 1
-                chooseSizeLabel.text = Constants.Sizes.Names[buttonIndex - 1]
-            }
-            
-            inStockLabel.text = calculateStock
-        }
-        else if (actionSheet.tag == Constants.Colors.MenuTag) {
-            // Add buttonup
-            if (buttonIndex == 1) {
-                createNewColorView()
-            }
-            else {
-                actionSheetButtonClicked(actionSheet, buttonIndex: buttonIndex, view: chooseColorLabel)
-            }
-        }
-        else if (actionSheet.tag == Constants.Types.MenuTag) {
-            actionSheetButtonClicked(actionSheet, buttonIndex: buttonIndex, view: chooseTypeLabel)
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        dismissTextFieldsByTapping()
         
         // Setup starting view
         if (currentProduct == nil) {
@@ -287,11 +233,6 @@ class EditPagesViewController: ShowProductViewController {
         titleLabel.layer.borderColor = UIColor.lightGrayColor().CGColor
         titleLabel.layer.cornerRadius = 5
         titleLabel.layer.borderWidth = 1
-        
-        // Add dismissing keyboard by tapping
-        let dismissTap = UITapGestureRecognizer(target: self, action: #selector(EditPagesViewController.dismissKeyboard))
-        dismissTap.cancelsTouchesInView = false
-        view.addGestureRecognizer(dismissTap)
     }
     
     // Helper to move description text field up when clicked and
@@ -305,11 +246,5 @@ class EditPagesViewController: ShowProductViewController {
         UIView.setAnimationDuration(duration)
         self.view.frame = CGRectOffset(self.view.frame, 0, distance)
         UIView.commitAnimations()
-    }
-    
-    // For Keyboard dismissal
-    func dismissKeyboard() {
-        view.endEditing(true)
-        searchField.endEditing(true)
     }
 }

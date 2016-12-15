@@ -14,6 +14,7 @@ class ShowProductViewController: Helper, UIActionSheetDelegate, UIAlertViewDeleg
     
     // Sizes index for calculating the number in stock
     var sizeIndex = -1
+    var colorIndex = -1
     var cancelColorIndex = 0
     var cancelSizeIndex = 0
     var typeName = ""
@@ -28,26 +29,7 @@ class ShowProductViewController: Helper, UIActionSheetDelegate, UIAlertViewDeleg
         cancelColorIndex = 1 // All and Cancel buttons
         
         for newColor in currentProduct.colors {
-            sheet.addButtonWithTitle(newColor as String)
-            cancelColorIndex += 1
-        }
-        
-        colorCancelButton(sheet)
-        return sheet
-    }
-    
-    func createEmployeeColorMenu() -> UIActionSheet {
-        let sheet: UIActionSheet = UIActionSheet()
-        sheet.title = "Current Product Colors"
-        sheet.delegate = self
-        sheet.tag = Constants.Colors.MenuTag
-        
-        // Add New Color button
-        sheet.addButtonWithTitle("✚ Add New Color")
-        cancelColorIndex = 1 // Add and Cancel buttons
-        
-        for newColor in currentProduct.colors {
-            sheet.addButtonWithTitle(newColor as String)
+            sheet.addButtonWithTitle(newColor.colorName)
             cancelColorIndex += 1
         }
         
@@ -117,6 +99,7 @@ class ShowProductViewController: Helper, UIActionSheetDelegate, UIAlertViewDeleg
         // Color ActionSheet
         else if (actionSheet.tag == Constants.Colors.MenuTag) {
             if (buttonIndex != cancelColorIndex) {
+                colorIndex = buttonIndex - 1
                 view.text = actionSheet.buttonTitleAtIndex(buttonIndex)
             }
         }
@@ -133,14 +116,20 @@ class ShowProductViewController: Helper, UIActionSheetDelegate, UIAlertViewDeleg
     var calculateStock: String {
         var stock = 0
         
-        // Calculates all sizes
-        if (sizeIndex == -1) {
-            for index in 0 ..< Constants.Sizes.Names.count {
-                stock += currentProduct.sizes[index].integerValue
+        if (colorIndex == -1) {
+            // Calculates all sizes
+            if (sizeIndex == -1) {
+                for index in 0 ..< Constants.Sizes.Names.count {
+                    stock += currentProduct.sizes[index].integerValue
+                }
+            }
+            else {
+                stock = currentProduct.sizes[sizeIndex].integerValue
             }
         }
+        // User selected a color
         else {
-            stock = currentProduct.sizes[sizeIndex].integerValue
+            
         }
         
         return "In Stock: " + String(stock)

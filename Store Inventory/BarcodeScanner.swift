@@ -15,15 +15,16 @@ import AVFoundation
 // Protocol to communicate with the modal calling classes
 // ScanInViewController and CheckOutViewController
 protocol barcodeScannerCommunicator {
-    func backFromBarcodeScanner(barcode: String?)
+    func backFromBarcodeScanner(barcode: String?, index: Int)
+    func presentViewController(viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?)
 }
 
 class BarcodeScanner: UIViewController, AVCaptureMetadataOutputObjectsDelegate, UIAlertViewDelegate {
     // Camera MetaData Properties
     var session: AVCaptureSession!
     var videoPreview: AVCaptureVideoPreviewLayer!
-    var code: String?
     var delegate: barcodeScannerCommunicator? = nil
+    var index: Int = -1
     
     override func shouldAutorotate() -> Bool {
         return false
@@ -117,47 +118,49 @@ class BarcodeScanner: UIViewController, AVCaptureMetadataOutputObjectsDelegate, 
             
             // Vibrate for feedback when found something
             AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-            session.stopRunning()
+            self.session.stopRunning()
         }
     }
     
     // Handle a scanned barcode
     func barcodeDetected(code: String) {
         // Notify user
-        let alert = UIAlertView(title: "Found a Barcode!", message: "Barcode is: \(code)", delegate: self, cancelButtonTitle: "Add to List")
-        alert.tag = 1
+        let alert = UIAlertController(title: "Found a Barcode!", message: "Barcode is: \(code)", preferredStyle: .Alert)
         
-        self.code = code
-        alert.show()
+        let okButton = UIAlertAction(title: "Ignore", style: .Default, handler: nil)        
+        let cancelButton = UIAlertAction(title: "Use Barcode", style: .Cancel) { action in
+            self.sendBarcode(code)
+        }
+        
+        alert.addAction(okButton)
+        alert.addAction(cancelButton)
+        delegate!.presentViewController(alert, animated: true, completion: nil)
     }
     
-    // Dismiss view when 'OK' is clicked in AlertView
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        // Found a barcode
-        if (alertView.tag == 1) {
-            let trimmedCode = code!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            let eanCode = "\(trimmedCode)"
-            var upcCode: String
-            
-            if (eanCode.hasPrefix("0") && eanCode.characters.count > 1) {
-                upcCode = String(eanCode.characters.dropFirst())
-                self.delegate?.backFromBarcodeScanner(upcCode)
-            }
-            else {
-                self.delegate?.backFromBarcodeScanner(eanCode)
-            }
+    // Send delegate found barcode when 'Use Barcode' is clicked in AlertView
+    func sendBarcode(code: String) {
+        let trimmedCode = code.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        let eanCode = "\(trimmedCode)"
+        var upcCode: String
+        
+        if (eanCode.hasPrefix("0") && eanCode.characters.count > 1) {
+            upcCode = String(eanCode.characters.dropFirst())
+            self.delegate?.backFromBarcodeScanner(upcCode, index: self.index)
         }
-        // Scanner encountered an error
         else {
-            self.delegate?.backFromBarcodeScanner(nil)
+            self.delegate?.backFromBarcodeScanner(eanCode, index: self.index)
         }
     }
     
     // Device was unable to scan/use the camera, show error notification
     func scanImpossible() {
-        let errorAlert = UIAlertView(title: "Error: Cannot Scan", message: "This device does not have a camera or this app does not have access to the camera, please enter barcodes manually", delegate: self, cancelButtonTitle: "OK")
-        errorAlert.tag = -1
-        errorAlert.show()
+        let alert = UIAlertController(title: "Error: Cannot Scan", message: "This device does not have a camera or this app does not have access to the camera, please enter barcodes manually", preferredStyle: .Alert)
+        let okButton = UIAlertAction(title: "OK", style: .Default) { action in
+            self.delegate?.backFromBarcodeScanner(nil, index: 0)
+        }
+        
+        alert.addAction(okButton)
+        self.presentViewController(alert, animated: true, completion: nil)
         session = nil
     }
     

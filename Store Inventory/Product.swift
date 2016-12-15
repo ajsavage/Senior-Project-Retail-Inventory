@@ -35,13 +35,13 @@ class Product: NSObject {
     // Creates a new product
     init(dict: NSDictionary, newImage: UIImage?) {
         super.init()
-        
-        _selfRef = FIRDatabase.database().reference().child("inventory").child(_id as String)
+
         _id = dict["ID"] as! String
         _title = dict["Title"] as! String
         _price = dict["Price"] as! Float
         _detailsRef = Details(dictionary: dict)
         _dictionary = dict
+        _selfRef = FIRDatabase.database().reference().child("inventory").child(_id as String)
         
         if (newImage == nil) {
             _image = UIImage(named: "DefaultImage")
@@ -148,6 +148,10 @@ class Product: NSObject {
         callback()
     }
     
+    func getInventoryOf(colorName: String) -> ColorInventory? {
+        return _detailsRef!.getInventoryOf(colorName)
+    }
+    
     func setImage(newImage: UIImage) {
         _image = newImage
     }
@@ -196,9 +200,9 @@ class Product: NSObject {
         }
     }
     
-    var colors: Array<NSString> {
+    var colors: Array<ColorInventory> {
         if _detailsRef == nil {
-            return [NSString]()
+            return [ColorInventory]()
         }
         else {
             return _detailsRef!.colors

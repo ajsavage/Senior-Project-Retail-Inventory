@@ -63,11 +63,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         let ref: FIRDatabaseReference? = userRef!.child("Favorites")
         
         ref!.observeSingleEventOfType(.Value, withBlock: { snapshot in
-            if !snapshot.exists() {
-                self.favoritesTableView.hidden = true
-                self.logoutButton.hidden = true
-            }
-            else {
+            if snapshot.exists() {
+                self.favoritesTableView.hidden = false
+                self.logoutButton.hidden = false
                 self.otherLogout.hidden = true
                 
                 for newFavorite in snapshot.children {
@@ -208,6 +206,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         else {
             emailField.text = prefs.stringForKey("USEREMAIL")
             userRef = FIRDatabase.database().reference().child("users").child(prefs.stringForKey("USERID")! as String)
+            self.favoritesTableView.hidden = true
+            self.logoutButton.hidden = true
             
             loadFavorites()
         }
