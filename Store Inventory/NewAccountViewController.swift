@@ -24,12 +24,14 @@ class NewAccountViewController: UIViewController, UITextFieldDelegate {
     // Loading Animation
     var indicator: UIActivityIndicatorView? = nil
     
+    // Opens creating a new account view
     @IBAction func createAccountClicked(sender: UIButton) {
         indicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
         createAccountButton.addSubview(indicator!)
         indicator!.frame = createAccountButton.bounds
         indicator!.startAnimating()
         
+        // Checks if the user login was valid
         if (validLogin()) {
             FIRAuth.auth()?.createUserWithEmail(email, password: password) { (user, error) in
                 if error != nil {
@@ -46,6 +48,7 @@ class NewAccountViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    // Handles alert view interactions
     private func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         // Exit on OK in successful alert view
         if (alertView.tag == 2 && buttonIndex == 0) {
@@ -53,6 +56,7 @@ class NewAccountViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    // Shows login error alert view
     private func loginError(message: String) {
         indicator?.removeFromSuperview()
         
@@ -60,6 +64,7 @@ class NewAccountViewController: UIViewController, UITextFieldDelegate {
         errorAlert.show()
     }
     
+    // Checks if the entered user data is valid
     private func validLogin() -> Bool {
         email = usernameLabel.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         password = passwordLabel.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
@@ -93,6 +98,7 @@ class NewAccountViewController: UIViewController, UITextFieldDelegate {
         return shouldLogin
     }
     
+    // Overrides the viewDidLoad function
     override func viewDidLoad() {
         super.viewDidLoad()
         

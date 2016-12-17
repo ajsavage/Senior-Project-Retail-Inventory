@@ -43,6 +43,7 @@ class DetailsViewController: ShowProductViewController {
     @IBAction func colorMenuSelected(sender: AnyObject) {
         let sheet = createCustomerColorMenu()
         
+        // Different presentation for iPads
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad) {
             sheet.showFromRect(sender.frame, inView: self.view, animated: true)
         } else {
@@ -58,6 +59,7 @@ class DetailsViewController: ShowProductViewController {
     @IBAction func sizeMenuSelected(sender: AnyObject) {
         let sheet = createSizeMenu
         
+        // Different presentation for iPads
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.Pad) {
             sheet.showFromRect(sender.frame, inView: self.view, animated: true)
         } else {
@@ -67,10 +69,12 @@ class DetailsViewController: ShowProductViewController {
     
     // Sets the choose size button title to the selected size on the action sheet
     func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
+        // Size action sheet
         if (actionSheet.tag == Constants.Sizes.MenuTag) {
             actionSheetButtonClicked(actionSheet, buttonIndex: buttonIndex, view: chooseSizeLabel)
             inStockLabel.text = calculateStock
         }
+        // Colors action sheet
         else if (actionSheet.tag == Constants.Colors.MenuTag) {
             actionSheetButtonClicked(actionSheet, buttonIndex: buttonIndex, view: chooseColorLabel)
         }
@@ -88,6 +92,7 @@ class DetailsViewController: ShowProductViewController {
         inStockLabel.text = calculateStock
     }
     
+    // Overrides the viewWillAppear function
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -105,6 +110,7 @@ class DetailsViewController: ShowProductViewController {
         self.currentProduct.loadInformation(false, callback: updateWithLoadedData)
     }
     
+    // Prepares for seque to editpages view
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "gotoEditing",
             let destination = segue.destinationViewController as? EditPagesViewController

@@ -15,8 +15,10 @@ class EditProductColorsViewController: Helper {
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var buttonView: UIView!
     @IBOutlet weak var searchField: UITextField!
-    @IBOutlet weak var removeCheckbox: CheckboxButton!
+    @IBOutlet weak var removeCheckbox: UIButton!
     @IBOutlet weak var checkbox: UIButton!
+    
+    var tracker: CheckboxButton = CheckboxButton()
     
     // Database Reference
     let dataRef: FIRDatabaseReference = FIRDatabase.database().reference()
@@ -42,22 +44,23 @@ class EditProductColorsViewController: Helper {
     // rather than open a view so the user can edit it
     var shouldRemove: Bool = false
     
-    @IBAction func removeCheckboxClicked(sender: CheckboxButton) {
-        if (sender.isChecked != nil) {
+    @IBAction func removeCheckboxClicked(sender: UIButton) {
+        if (tracker.isChecked != nil) {
             // Check if box is already selected
-            if (sender.isChecked!) {
+            if (tracker.isChecked!) {
                 // Becomes unchecked box
-                sender.setImage(UIImage(named: "Unchecked"), forState: .Normal)
+                checkbox.setImage(UIImage(named: "Unchecked"), forState: .Normal)
                 shouldRemove = false
             }
             else {
                 // Becomes checked box
-                sender.setImage(UIImage(named: "Checked"), forState: .Normal)
+                checkbox.setImage(UIImage(named: "Checked"), forState: .Normal)
                 shouldRemove = true
             }
         }
     }
     
+    // Adds a new colors
     @IBAction func addButtonClicked(sender: AnyObject) {
         let editColor = storyboard?.instantiateViewControllerWithIdentifier("addNewColor") as! AddNewColorViewController
         editColor.callback = addNewColor
@@ -66,6 +69,7 @@ class EditProductColorsViewController: Helper {
         navigationController?.pushViewController(editColor, animated: true)
     }
     
+    // Searches a product ID
     @IBAction func searchFieldClicked(sender: AnyObject) {
         if (self.isBeingDismissed()) {
             showSearchAlert("You are being dismissed!")
@@ -76,6 +80,7 @@ class EditProductColorsViewController: Helper {
         else if (sender.text!.characters.count != Constants.ProductID.Length) {
             showSearchAlert("Not a valid Product ID - Product IDs must be exactly \(Constants.ProductID.Length) characters long.")
         }
+        // Can search for the ID
         else {
             showLoadingSymbol(searchField)
             
@@ -85,6 +90,7 @@ class EditProductColorsViewController: Helper {
             let dataRef = FIRDatabase.database().reference().child("inventory")
             let productRef = dataRef.child(capitalID)
             
+            // Loads product from database
             productRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
                 if !snapshot.exists() {
                     self.showSearchAlert("Product ID# " + capitalID + " does not currently exist in the database.")
@@ -92,12 +98,13 @@ class EditProductColorsViewController: Helper {
                 }
                 else {
                     self.currentProduct = Product(data: snapshot, ref: dataRef)
-                    self.currentProduct!.loadInformation(true, callback: self.updateWithLoadedData)
+                    self.currentProduct!.loadInformation(false, callback: self.updateWithLoadedData)
                 }
             })
         }
     }
     
+    // Saves the updated product to database
     @IBAction func saveButtonClicked(sender: AnyObject) {
         let id = (currentProduct?.productID)! as String
         
@@ -112,6 +119,7 @@ class EditProductColorsViewController: Helper {
         navigationController?.popViewControllerAnimated(true)
     }
     
+    // Cancels view
     @IBAction func cancelButtonClicked(sender: AnyObject) {
         navigationController?.popViewControllerAnimated(true)
     }
@@ -288,12 +296,13 @@ class EditProductColorsViewController: Helper {
         }
     }
     
+    // Overrides the viewDidLoad function
     override func viewDidLoad() {
         super.viewDidLoad()
         dismissTextFieldsByTapping()
         
         // Set up remove view data
-        removeCheckbox.isChecked = false
+        tracker.isChecked = false
         shouldRemove = false
         
         // Setup starting view

@@ -21,6 +21,7 @@ class ColorPickerViewController: UIViewController {
     
     // Button Actions  
     @IBAction func selectButtonClicked(sender: AnyObject) {
+        // Checks if a delegate exists
         if delegate != nil && colorPicker != nil {
             delegate?.newSelectedColor(colorPicker!.color)
         }
@@ -28,6 +29,7 @@ class ColorPickerViewController: UIViewController {
         navigationController?.popViewControllerAnimated(true)
     }
 
+    // Overrides the viewDidLoad function
     override func viewDidLoad() {
         super.viewDidLoad()
         colorPicker = SwiftHSVColorPicker(frame: CGRectMake(10, 20, 300, 400))

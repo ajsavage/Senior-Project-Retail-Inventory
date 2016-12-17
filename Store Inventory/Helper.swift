@@ -40,6 +40,7 @@ class Helper: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     // Called when a textView is highlighted and the Return key is pushed
     // From UITextViewDelegate
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        // Checks if the calling textview is the product description
         if (textView.tag != Constants.Description.FieldTag) {
             // Return key was pressed
             if text == "\n" {
@@ -82,10 +83,11 @@ class Helper: UIViewController, UITextFieldDelegate, UITextViewDelegate {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(Helper.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
     }
     
-    // called when the keyboard is going to be shown
+    // Called when the keyboard is going to be shown
     func keyboardWillShow(notification: NSNotification) {
         let temp = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue()
         
+        // Checks if the keyboard height value exists
         if temp != nil {
             keyboardSize = temp!.height
         }
@@ -93,6 +95,7 @@ class Helper: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
     // Called when a textField is selected for editing
     func textFieldDidBeginEditing(textField: UITextField) {
+        // Checks if the textfield hasn't already been moved
         if (difference == nil) {
             difference = textField.frame.maxY - (view.frame.maxY - CGFloat(keyboardSize))
             
@@ -108,6 +111,7 @@ class Helper: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
     // Called when a textField is being edited and the Return key is pushed
     func textFieldDidEndEditing(textField: UITextField) {
+        // Checks if the textfield should be moved
         if (difference != nil) {
             animateScrollView(textField, distanceLength: difference!, up: false)
             difference = nil
@@ -116,6 +120,7 @@ class Helper: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
     // Called when a textView is selected for editing
     func textViewDidBeginEditing(textView: UITextView) {
+        // Checks if the textview should be moved
         if (difference == nil) {
             difference = textView.frame.maxY - (view.frame.maxY - CGFloat(keyboardSize))
             
@@ -131,6 +136,7 @@ class Helper: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
     // Called when a textView is being edited and the Return key is pushed
     func textViewDidEndEditing(textView: UITextView) {
+        // Checks if the textview should be moved
         if (difference != nil) {
             animateScrollView(textView, distanceLength: difference!, up: false)
             difference = nil
@@ -143,6 +149,7 @@ class Helper: UIViewController, UITextFieldDelegate, UITextViewDelegate {
         let duration = 0.3
         let distance = distanceLength * (up ? -1 : 1)
         
+        // Add view movement
         UIView.beginAnimations("animateScrollView", context: nil)
         UIView.setAnimationBeginsFromCurrentState(true)
         UIView.setAnimationDuration(duration)

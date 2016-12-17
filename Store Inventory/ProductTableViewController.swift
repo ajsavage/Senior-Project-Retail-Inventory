@@ -18,7 +18,8 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet weak var filterView: UIView!
     @IBOutlet weak var loadingSymbolLabel: UILabel!
     @IBOutlet weak var grayedOutBackground: UIButton!
-  
+    @IBOutlet weak var scrollFilterView: UIScrollView!
+    
     // Price Properties
     @IBOutlet weak var maxPriceLabel: UILabel!
     @IBOutlet weak var priceSlider: UISlider!
@@ -32,6 +33,16 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
     // Color Buttons
     @IBOutlet weak var allButton: UIButton!
     @IBOutlet var coloredButtons: [UIButton]!
+    
+    // if already loading
+    var isLoading = false
+    var index: Int = 0
+    
+    // starting value
+    var currentStartingValue: String = ""
+    
+    // Number of employees to load at a time
+    let loadNumber = 5
     
     // Arrays holding the products currently on the phone
     var products = [Product]()
@@ -50,15 +61,17 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
     
     // Button Actions
     @IBAction func cancelButton(sender: UIButton) {
-        filterView.hidden = true
+        scrollFilterView.hidden = true
         grayedOutBackground.hidden = true
     }
     
+    // Show filter menu
     @IBAction func openFilterMenu(sender: UIButton) {
-        filterView.hidden = false
+        scrollFilterView.hidden = false
         grayedOutBackground.hidden = false
     }
     
+    // Selects all color options
     @IBAction func allColorsButton(sender: UIButton) {
         allButton.selected = true
         
@@ -67,6 +80,7 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
         }
     }
     
+    // Searches the given filters
     @IBAction func searchButton(sender: UIButton) {
         showLoadingSymbol(loadingSymbolLabel)
         
@@ -111,9 +125,9 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
             }
             
             let colorSet = Set(searchColors)
- //           self.productSearchResults = self.productSearchResults.filter() {
-       //         !colorSet.intersect(($0 as Product).colors).isEmpty
-   //         }
+            self.productSearchResults = self.productSearchResults.filter() {
+           //     !colorSet.intersect(($0 as Product).colors).isEmpty
+            }
         }
         
         // Notify user if there are no found products
@@ -169,7 +183,7 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
     
     private func setupFiltersMenu() {
         // hide filters menu
-        filterView.hidden = true
+        scrollFilterView.hidden = true
         grayedOutBackground.hidden = true
         
         // price slider with max price
@@ -220,10 +234,59 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
         return true
     }
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        
+        products = Array<Product>()
+      //  showLoadingSymbol(tableView)
+        currentStartingValue = ""
+        loadMoreProducts()
+    }
+    
+    // Loads more products for table view
+    private func loadMoreProducts() {
+        if (!isLoading) {
+            isLoading = true
+            var newProduct: Product? = nil
+            
+            // Loads more inventory from database
+            dataRef.child("inventory").queryOrderedByKey().queryStartingAtValue(currentStartingValue).queryLimitedToFirst(UInt(loadNumber)).observeEventType(.Value, withBlock: { snapshot in
+                
+                if !snapshot.exists() { return }
+                
+                // Loads in async thread
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                    for child in snapshot.children {
+                        let converted = child as! FIRDataSnapshot
+                        
+                        if self.index == self.loadNumber - 1 {
+                            dispatch_async(dispatch_get_main_queue()) {
+                                self.currentStartingValue = converted.key
+                                self.tableView.reloadData()
+                                self.isLoading = false
+                   //             self.indicator?.removeFromSuperview()
+                                self.index = 0
+                            }
+                        }
+                        else {
+                            newProduct = Product(data: converted, ref: self.dataRef.child("inventory"))
+                                
+                            if (newProduct!.price > 0) {
+                                self.products.append(newProduct!)
+                                self.loadProductImageFromStorage(newProduct!)
+                            }
+                        }
+                    }
+                }
+            })
+        }
+    }
+    
+    // Overrides the viewDidLoad function
     override func viewDidLoad() {
         super.viewDidLoad()
-        var newProduct: Product!
-        
+
+        currentStartingValue = ""
         setupFiltersMenu()
         
         // Greet user in title
@@ -233,28 +296,16 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
         let backButton = UIBarButtonItem.init(title: "Home", style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
         self.navigationItem.backBarButtonItem = backButton
         
-        dataRef.child("inventory").observeSingleEventOfType(.Value, withBlock: { snapshot in
-            
-            if !snapshot.exists() { return }
-            
-            for child in snapshot.children {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                    let converted = child as! FIRDataSnapshot
-                    newProduct = Product(data: converted, ref: self.dataRef.child("inventory"))
-                    
-                    if (newProduct.price > 0) {
-                        self.products.append(newProduct)
-                        self.loadProductImageFromStorage(newProduct)
-                    }
-                }
-            }
-        })
+      //  showLoadingSymbol(tableView)
+        loadMoreProducts()
     }
     
+    // Loads a product's image from storage
     func loadProductImageFromStorage(product: Product) {
         let storage = FIRStorage.storage().referenceForURL("gs://storeinventoryapp.appspot.com")
         let newImage = storage.child(product.productID as String + ".jpeg")
         
+        // Loads image
         newImage.dataWithMaxSize(1 * 1024 * 1024) { (data, error) -> Void in
             dispatch_async(dispatch_get_main_queue()) {
                 if (error != nil) {
@@ -266,7 +317,12 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
             
                 self.productSearchResults = self.products
                 self.tableView.reloadData()
-             //   self.tableView.insertRowsAtIndexPaths([NSIndexPath(row: self.products.count - 1, section: 0)], withRowAnimation: true)
+                self.index += 1
+                
+                self.tableView.reloadData()
+                self.isLoading = false
+               // self.indicator?.removeFromSuperview()
+                self.index = 0
             }
         }
     }
@@ -279,6 +335,7 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
         indicator!.startAnimating()
     }
 
+    // Table view delegate functions
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -296,9 +353,16 @@ class ProductTableViewController: UIViewController, UITableViewDelegate, UITable
         cell.priceLabel.text = currentProduct.strPrice
         cell.productImage.image = currentProduct.image
         
+        // Loads more users if needed
+        if (!isLoading && indexPath.row == productSearchResults.count - 1) {
+         //   showLoadingSymbol(cell)
+            loadMoreProducts()
+        }
+        
         return cell
     }
     
+    // Prepares for segue to new views
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == detailSegueIdentifier,
             let destination = segue.destinationViewController as? DetailsViewController,

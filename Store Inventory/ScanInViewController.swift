@@ -38,6 +38,7 @@ class ScanInViewController: ShowProductViewController, barcodeScannerCommunicato
     // Current inventory count
     var currentCount: Int = 0
     
+    // Saves the updated inventory
     @IBAction func saveButtonClicked(sender: AnyObject) {
         showLoadingSymbol(sender as! UIButton)
         
@@ -50,7 +51,9 @@ class ScanInViewController: ShowProductViewController, barcodeScannerCommunicato
         indicator?.removeFromSuperview()
     }
     
+    // Scans a new barcode
     @IBAction func scanButtonClicked(sender: UIButton) {
+        // Checks if there is a previous barcode to save
         if !isFirstTime {
             saveButtonClicked(scanInButton)
         }
@@ -64,11 +67,13 @@ class ScanInViewController: ShowProductViewController, barcodeScannerCommunicato
         self.presentViewController(scanner, animated: true, completion: nil)
     }
 
+    // Add one to inventory
     @IBAction func plusClicked(sender: AnyObject) {
         currentCount += 1
         inventoryCountField.text = String(currentCount)
     }
     
+    // Subtract one from inventory
     @IBAction func minusClicked(sender: AnyObject) {
         if (currentCount > 0) {
             currentCount -= 1
@@ -80,19 +85,22 @@ class ScanInViewController: ShowProductViewController, barcodeScannerCommunicato
     func backFromBarcodeScanner(barcode: String?, index: Int) {
         self.barcode = barcode
         
+        // Checks if barcode exists
         if (barcode != nil) {
-            barcodeLabel.text = "Barcode: \(self.barcode)"
+            barcodeLabel.text = "Barcode: \(self.barcode!)"
             
-            dataRef.child("barcodeIDs/\(barcode)").observeSingleEventOfType(.Value, withBlock: { snapshot in
+            // Loads barcode info from database
+            dataRef.child("barcodeIDs/\(barcode!)").observeSingleEventOfType(.Value, withBlock: { snapshot in
                 if !snapshot.exists() {
                     self.showSearchAlert("Barcode #" + barcode! + " does not currently exist in the database.")
                 }
                 else {
-                    self.color = snapshot.valueForKey("Color") as? String
-                    self.size = snapshot.valueForKey("Size") as? String
-                    let id = snapshot.valueForKey("Product") as? String
+                    self.color = snapshot.childSnapshotForPath("Color").value as? String
+                    self.size = snapshot.childSnapshotForPath("Size").value as? String
+                    let id = snapshot.childSnapshotForPath("Product").value as? String
                     
-                    self.dataRef.child("inventory/\(id)").observeSingleEventOfType(.Value, withBlock: { snapshot in
+                    // Loads product barcode relates to from database
+                    self.dataRef.child("inventory/\(id!)").observeSingleEventOfType(.Value, withBlock: { snapshot in
                         if !snapshot.exists() {
                             self.showSearchAlert("Product #" + id! + " does not currently exist in the database.")
                         }
@@ -129,8 +137,10 @@ class ScanInViewController: ShowProductViewController, barcodeScannerCommunicato
         titleLabel.text = currentProduct.title as String
         imageView.image = currentProduct.image
         inventoryCountField.text = String(currentCount)
+        indicator?.removeFromSuperview()
     }
     
+    // Overrides the viewDidLoad function
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -139,6 +149,7 @@ class ScanInViewController: ShowProductViewController, barcodeScannerCommunicato
         mainView.hidden = true
     }
     
+    // Checks the entered inventory count is valid
     override func textFieldDidEndEditing(textField: UITextField) {
         let string = textField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         let newCount: Int? = Int(string)

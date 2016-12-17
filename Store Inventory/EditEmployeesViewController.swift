@@ -14,7 +14,7 @@ class EditEmployeesViewController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var topLabel: UILabel!
     @IBOutlet weak var table: UITableView!
     
-    // reference to the inventory portion of the database
+    // Reference to the inventory portion of the database
     let dataRef = FIRDatabase.database().reference().child("users")
     
     // Loading Animation
@@ -27,11 +27,12 @@ class EditEmployeesViewController: UIViewController, UITableViewDelegate, UITabl
     var isLoading = false
     
     // Number of employees to load at a time
-    let loadNumber = 30
+    let loadNumber = 3
     
     // Array holding all of the users to display
     var users = Array<User>()
     
+    // Overrides the viewDidLoad function
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,6 +40,7 @@ class EditEmployeesViewController: UIViewController, UITableViewDelegate, UITabl
         loadMoreEmployees()
     }
     
+    // If using too much memory
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
 
@@ -47,17 +49,22 @@ class EditEmployeesViewController: UIViewController, UITableViewDelegate, UITabl
         loadMoreEmployees()
     }
     
+    // Loads more employees to the table
     private func loadMoreEmployees() {
+        // Checks if more employees are already being loaded
         if (!isLoading) {
             isLoading = true
             
+            // Loads employees from database
             dataRef.queryOrderedByKey().queryLimitedToFirst(UInt(loadNumber)).observeEventType(.Value, withBlock: { snapshot in
                 
                 if !snapshot.exists() { return }
                 
+                // Loads products from snapchat in async thread
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                     let dict = snapshot.value as? NSDictionary
                     
+                    // Checks if the dictionary exists
                     if (dict != nil) {
                         for unconvertedKey in dict!.allKeys {
                             let id: String = unconvertedKey as? String != nil ?
@@ -76,14 +83,18 @@ class EditEmployeesViewController: UIViewController, UITableViewDelegate, UITabl
                         }
                     }
                 
-                    self.table.reloadData()
-                    self.isLoading = false
-                    self.indicator?.removeFromSuperview()
+                    // Reloads table on main thread
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.table.reloadData()
+                        self.isLoading = false
+                        self.indicator?.removeFromSuperview()
+                    }
                 }
             })
         }
     }
     
+    // Table view delegate methods
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -92,6 +103,7 @@ class EditEmployeesViewController: UIViewController, UITableViewDelegate, UITabl
         return users.count
     }
     
+    // Loads a new employee cell
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cellIdentifier = "EmployeeTableViewCell"
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! EmployeeTableViewCell
@@ -100,6 +112,7 @@ class EditEmployeesViewController: UIViewController, UITableViewDelegate, UITabl
         // Name
         cell.nameLabel.text = currentUser.name
         cell.managerCheckbox.enabled = false
+        cell.employeeCheckbox.tag = indexPath.row
         
         // User Permissions
         if (currentUser.type == "Manager") {
@@ -109,15 +122,14 @@ class EditEmployeesViewController: UIViewController, UITableViewDelegate, UITabl
         }
         else {
             cell.employeeCheckbox.addTarget(self, action: #selector(checkboxSelected), forControlEvents: .TouchUpInside)
-            cell.employeeCheckbox.userID = currentUser.id
         
             if currentUser.type == "Employee" {
                 cell.employeeCheckbox.setImage(UIImage(named: "Checked"), forState: .Normal)
-                cell.employeeCheckbox.isChecked = true
+                currentUser.isChecked = true
             }
             // Customers have no permissions
             else {
-                cell.employeeCheckbox.isChecked = false
+                currentUser.isChecked = false
             }
         }
         
@@ -131,18 +143,20 @@ class EditEmployeesViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     // Employee checkbox button action
-    func checkboxSelected(sender: CheckboxButton!) {
-        if (sender.isChecked != nil) {
+    func checkboxSelected(sender: UIButton!) {
+        let user: User = users[sender.tag]
+        
+        if (user.isChecked != nil) {
             // Check if box is already selected
-            if (sender.isChecked!) {
+            if (user.isChecked!) {
                 // User becomes a customer
                 sender.setImage(UIImage(named: "Unchecked"), forState: .Normal)
-                dataRef.child(sender.userID!).child("UserType").setValue("Customer")
+                dataRef.child(user.id!).child("UserType").setValue("Customer")
             }
             else {
                 // User becomes an employee
                 sender.setImage(UIImage(named: "Checked"), forState: .Normal)
-                dataRef.child(sender.userID!).child("UserType").setValue("Employee")
+                dataRef.child(user.id!).child("UserType").setValue("Employee")
             }
         }
     }

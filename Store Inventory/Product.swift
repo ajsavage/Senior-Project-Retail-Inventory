@@ -35,7 +35,8 @@ class Product: NSObject {
     // Creates a new product
     init(dict: NSDictionary, newImage: UIImage?) {
         super.init()
-
+        
+        // Sets main data values
         _id = dict["ID"] as! String
         _title = dict["Title"] as! String
         _price = dict["Price"] as! Float
@@ -43,6 +44,7 @@ class Product: NSObject {
         _dictionary = dict
         _selfRef = FIRDatabase.database().reference().child("inventory").child(_id as String)
         
+        // Checks if there is a product image available
         if (newImage == nil) {
             _image = UIImage(named: "DefaultImage")
         }
@@ -50,7 +52,10 @@ class Product: NSObject {
             _image = newImage
         }
         
+        // Uploads the product
         loadProductToDatabase()
+        
+        // Uploads the image
         saveImage(_image, callback: noCallback)
     }
     
@@ -67,21 +72,25 @@ class Product: NSObject {
         _selfRef = FIRDatabase.database().reference().child("inventory/\(prodID)")
         _id = prodID
         
+        // Downloads the main product data
         _selfRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
          
             if !snapshot.exists() { return }
           
-            self._title = snapshot.valueForKey("Title") as! String
-            self._price = snapshot.valueForKey("Price") as! Float
+            self._title = snapshot.childSnapshotForPath("Title").value as! String
+            self._price = snapshot.childSnapshotForPath("Price").value as! Float
         })
-            
+        
+        // Loads the product image
         getImageFromStorage(noCallback)
     }
     
+    // Empty method used when callbacks are unnecessary
     private func noCallback() {
         
     }
     
+    // Uploads the product to the Firebase database
     private func loadProductToDatabase() {
         let mutDictionary: NSMutableDictionary = _dictionary.mutableCopy() as! NSMutableDictionary
         mutDictionary.removeObjectForKey("ID")
@@ -100,7 +109,9 @@ class Product: NSObject {
     
     // Loads all of the product's information from the database at the selfRef location
     func loadInformation(loadImage: Bool, callback: () -> ()) {
+        // Checks if the product's information already exists
         if _selfRef != nil && _detailsRef == nil {
+            // Checks if the image still needs to be loaded
             if (loadImage) {
                 getImageFromStorage(callback)
             }
@@ -113,13 +124,15 @@ class Product: NSObject {
         }
     }
     
-    // Loads the image in storage saved under the product's id number 
+    // Loads the image from Firebase Storage saved under the product's id number
     // or the default image if not available
     func getImageFromStorage(callback: () -> ()) {
         let storage = FIRStorage.storage().referenceForURL("gs://storeinventoryapp.appspot.com")
         let newImage = storage.child(_id as String + ".jpeg")
         
+        // Accesses Firebase Storage
         newImage.dataWithMaxSize(1 * 1024 * 1024) { (data, error) -> Void in
+            // Checks if no image exists
             if (error != nil) {
                 self._image = UIImage(named: "DefaultImage")!
             }
@@ -137,6 +150,7 @@ class Product: NSObject {
         let storage = FIRStorage.storage().referenceForURL("gs://storeinventoryapp.appspot.com")
         let newImage = storage.child(_id as String + ".jpeg")
         
+        // Uploads the given image
         newImage.putData(data, metadata: nil) { metadata, error in
             if (error != nil) {
                 print("Saving Product Image failed!")
@@ -148,10 +162,12 @@ class Product: NSObject {
         callback()
     }
     
+    // Returns the inventory count of a given color forthis product
     func getInventoryOf(colorName: String) -> ColorInventory? {
         return _detailsRef!.getInventoryOf(colorName)
     }
     
+    // Changes this product's image
     func setImage(newImage: UIImage) {
         _image = newImage
     }
@@ -181,7 +197,6 @@ class Product: NSObject {
         return _id
     }
     
-    // Access the details
     var productDescription: NSString! {
         if _detailsRef == nil {
             return ""

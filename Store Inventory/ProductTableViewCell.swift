@@ -8,6 +8,7 @@
 
 import UIKit
 
+// Cell for displaying products in customer home table
 class ProductTableViewCell: UITableViewCell {
     
     // Properties

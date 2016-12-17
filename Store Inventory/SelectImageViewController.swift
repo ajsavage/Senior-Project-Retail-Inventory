@@ -22,6 +22,7 @@ class SelectImageViewController: Helper, UIImagePickerControllerDelegate, UINavi
 
     // Button Actions
     @IBAction func takePhotoPushed(sender: AnyObject) {
+        // Checks if the device has a camera
         if (!UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)) {
             showErrorAlert("Error Alert", message: "This device has no camera, please select image from photo library.")
             return
@@ -35,6 +36,7 @@ class SelectImageViewController: Helper, UIImagePickerControllerDelegate, UINavi
         self.presentViewController(imagePicker, animated: true, completion: nil)
     }
     
+    // Select a photo
     @IBAction func selectPhotoPushed(sender: AnyObject) {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
@@ -44,19 +46,23 @@ class SelectImageViewController: Helper, UIImagePickerControllerDelegate, UINavi
         self.presentViewController(imagePicker, animated: true, completion: nil)
     }
     
+    // Cancel the image picker
     @IBAction func cancelButtonPushed(sender: AnyObject) {
         delegate?.selectedImageCallback(nil)
         navigationController?.popViewControllerAnimated(true)
     }
     
+    // Save the selected image
     @IBAction func saveImageButtonPushed(sender: AnyObject) {
         delegate?.selectedImageCallback(imageView.image)
         navigationController?.popViewControllerAnimated(true)
     }
     
+    // Display the user picked image
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let image: UIImage? = info[UIImagePickerControllerOriginalImage] as? UIImage
         
+        // Checks if there is an image to display
         if (image != nil) {
             self.imageView.image = image
         }
@@ -64,6 +70,7 @@ class SelectImageViewController: Helper, UIImagePickerControllerDelegate, UINavi
         picker.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    // Cancels the picker if it is canceled
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         picker.dismissViewControllerAnimated(true, completion: nil)
     }

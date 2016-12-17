@@ -29,6 +29,7 @@ class checkoutInventoryViewController: Helper, barcodeScannerCommunicator {
     // Database Reference
     let dataRef: FIRDatabaseReference = FIRDatabase.database().reference()
     
+    // Scans a new barcode
     @IBAction func scanOutButton(sender: AnyObject) {
         let scanner = BarcodeScanner()
         scanner.delegate = self
@@ -37,15 +38,18 @@ class checkoutInventoryViewController: Helper, barcodeScannerCommunicator {
         self.presentViewController(scanner, animated: true, completion: nil)
     }
     
+    // Reduces each scanned product's inventory by 1
     @IBAction func checkoutButtonClicked(sender: AnyObject) {
         showLoadingSymbol(barcodesScrollView)
         
+        // Reduces each barcodes inventory by one
         for barcode in barcodeArray {
+            // Loads barcode info from database
             dataRef.child("barcodeIDs/\(barcode)").observeEventType(.Value, withBlock: { snapshot in
                 if snapshot.exists() {
-                    self.id = snapshot.valueForKeyPath("Product") as? String
-                    self.color = snapshot.valueForKeyPath("Color") as? String
-                    self.size = snapshot.valueForKeyPath("Size") as? String
+                    self.id = snapshot.childSnapshotForPath("Product").value as? String
+                    self.color = snapshot.childSnapshotForPath("Color").value as? String
+                    self.size = snapshot.childSnapshotForPath("Size").value as? String
                     self.checkoutInventory(1)
                 }
             })
@@ -54,23 +58,27 @@ class checkoutInventoryViewController: Helper, barcodeScannerCommunicator {
         navigationController?.popViewControllerAnimated(true)
     }
     
+    // Cancels view
     @IBAction func CancelButtonClicked(sender: AnyObject) {
         navigationController?.popViewControllerAnimated(true)
     }
     
     // Helper method for checking out products
     private func checkoutInventory(quantity: Int) {
+        // Checks if the barcode info exists
         if (id != nil && color != nil && size != nil) {
+            // Loads the relevant product from database
             dataRef.child("colors/\(color)").observeEventType(.Value, withBlock: { snapshot in
                 if snapshot.exists() {
-                    self.type = snapshot.valueForKeyPath("Type") as? String
+                    self.type = snapshot.childSnapshotForPath("Type").value as? String
                     
+                    // Checks if the product has a type
                     if self.type != nil {
                         let path = self.dataRef.child("Inventory/\(self.id)/Colors/\(self.type)/\(self.color)")
                         
                         path.observeEventType(.Value, withBlock: { snapshot in
                             if snapshot.exists(){
-                                if var currentInventory = snapshot.valueForKeyPath(self.size!) as? Int {
+                                if var currentInventory = snapshot.childSnapshotForPath(self.size!).value as? Int {
                                     if (currentInventory > 0) {
                                         currentInventory -= quantity
                                     }
@@ -86,22 +94,27 @@ class checkoutInventoryViewController: Helper, barcodeScannerCommunicator {
     }
     
     // Function called by the barcode scanner when scan is completed
-    func backFromBarcodeScanner(barcode: String?, index: Int) {
-        if (barcode != nil) {
+    func backFromBarcodeScanner(maybeBarcode: String?, index: Int) {
+        // Check if the barcode exists
+        if (maybeBarcode != nil) {
+            let barcode: String = maybeBarcode!
+            
+            // Loads the barcode info
             dataRef.child("barcodeIDs/\(barcode)").observeEventType(.Value,
                 withBlock: { snapshot in
                 
+                // Checks if the barcode info exists
                 if snapshot.exists() {
-                    if let id = snapshot.valueForKeyPath("Product") as? String {
+                    if let id = snapshot.childSnapshotForPath("Product").value as? String {
                         var title = "Barcode: \(barcode) for \(id)"
                         
-                        let temp = snapshot.valueForKeyPath("Color") as? String
-                        let temp2 = snapshot.valueForKeyPath("Size") as? String
+                        let temp = snapshot.childSnapshotForPath("Color").value as? String
+                        let temp2 = snapshot.childSnapshotForPath("Size").value as? String
                         if (temp != nil && temp2 != nil) {
-                            title = title + "\nA \(temp) \(temp2)"
+                            title = title + "\nA \(temp!) \(temp2!)"
                         }
                         
-                        self.setupBarcodeView(barcode!, title: title)
+                        self.setupBarcodeView(barcode, title: title)
                     }
                 }
                 // Notify user barcode is currently not in the database
@@ -117,13 +130,14 @@ class checkoutInventoryViewController: Helper, barcodeScannerCommunicator {
         barcodeArray.append(barcode)
         
         // Create new barcode button
-        let barcodeButton = UIButton()
+        let barcodeButton = UILabel()
         var addHeight = 0
-        barcodeButton.frame = CGRect(x: 0, y: nextYValue, width: Int(barcodesScrollView.bounds.width),
+        let width: Int? = Int(barcodesScrollView.bounds.width)
+        barcodeButton.frame = CGRect(x: 0, y: nextYValue, width: width!,
                                      height: barcodeButtonHeight)
         
-        barcodeButton.setTitle(title, forState: .Normal)
-        barcodeButton.titleLabel?.textAlignment = NSTextAlignment.Center
+        barcodeButton.text = title
+      //  barcodeButton.titleLabel?.textAlignment = NSTextAlignment.Center
         
         // Calculate addHeight, which is the height of a color swatch
         // plus extra space unless on the first row
@@ -136,13 +150,14 @@ class checkoutInventoryViewController: Helper, barcodeScannerCommunicator {
         
         // Extend scrollView
         let currentSize = barcodesScrollView.contentSize
-        barcodesScrollView.contentSize = CGSize(width: currentSize.width, height: currentSize.height + CGFloat(addHeight))
+        barcodesScrollView.contentSize = CGSize(width: CGFloat(width!), height: currentSize.height + CGFloat(addHeight))
       
         // Move down values
         nextYValue += addHeight
         barcodesScrollView.addSubview(barcodeButton)
     }
     
+    // Overrides the viewDidLoad function
     override func viewDidLoad() {
         super.viewDidLoad()
     }

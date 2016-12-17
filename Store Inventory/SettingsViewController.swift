@@ -33,6 +33,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     // Favorites Table View Property and Functions
     var favorites = [String]()
     
+    // Table view delegate functions
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -59,9 +60,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         return true
     }
     
+    // Loads all of the current users' favorites
     private func loadFavorites() {
         let ref: FIRDatabaseReference? = userRef!.child("Favorites")
         
+        // Loads the favorites from the database
         ref!.observeSingleEventOfType(.Value, withBlock: { snapshot in
             if snapshot.exists() {
                 self.favoritesTableView.hidden = false
@@ -79,15 +82,18 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         })
     }
 
+    // Removes the loading symbol if needed
     func exitSettings() {
         indicator?.removeFromSuperview()
         dismissViewControllerAnimated(true, completion: nil)
     }
     
+    // Logout user
     @IBAction func LogoutButtonClicked(sender: UIButton) {
         NSUserDefaults.standardUserDefaults().removePersistentDomainForName(NSBundle.mainBundle().bundleIdentifier!)
         prefs.setObject(false, forKey: "ISLOGGEDIN")
         
+        // Attempts to sign out the user from Firebase
         do {
             try FIRAuth.auth()!.signOut()
         } catch {
@@ -96,15 +102,16 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         }
         
         // Back to Login
-   //     navigationController?.popToRootViewControllerAnimated(false)
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         appDelegate.switchRootToLogin()
     }
     
+    // Cancel settings and exit
     @IBAction func CancelButtonAction(sender: UIBarButtonItem) {
         dismissViewControllerAnimated(true, completion: nil)
     }
     
+    // Saves the updated settings
     @IBAction func SaveButtonAction(sender: UIBarButtonItem) {
         let newPassword = passwordField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         let newName = displayNameField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
@@ -163,11 +170,13 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
+    // Shows an error alert view
     func showUpdateError(errorType: String) {
         let errorAlert = UIAlertView(title: "Profile Update Error", message: "Sorry, we were unable to update your \(errorType) at this time.", delegate: self, cancelButtonTitle: "OK")
         errorAlert.show()
     }
     
+    // Handles alert view user interaction
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         // If user clicked "YES"
         if (buttonIndex == 0) {
@@ -184,6 +193,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         exitSettings()
     }
     
+    // Hides all of the views unavailable for guest users
     private func setupGuestView() {
         emailField.hidden = true
         passwordField.hidden = true
@@ -196,10 +206,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         logoutButtonGuest.hidden = false
     }
     
+    // Overrides the viewDidLoad function
     override func viewDidLoad() {
         super.viewDidLoad()
         displayNameField.text = prefs.stringForKey("USERNAME")
         
+        // Checks if the user is a guest
         if prefs.boolForKey("ISGUESTUSER") {
             setupGuestView()
         }
@@ -223,6 +235,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         view.endEditing(true)
     }
     
+    // Handles view seguing to another view
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "gotoDetails",
             let destination = segue.destinationViewController as? DetailsViewController,

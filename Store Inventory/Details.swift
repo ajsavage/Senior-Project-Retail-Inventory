@@ -29,10 +29,12 @@ class Details: NSObject {
         _description = dictionary["Description"] as! String
         _type = dictionary["Type"] as! String
         
+        // Checks if the dictionary has existing colors
         if (dictionary["Colors"] as? NSDictionary) != nil {
             handleColors(dictionary["Colors"] as! NSDictionary)
         }
      
+        // Check if the dictionary has existing size counts
         if (dictionary["Sizes"] as? NSDictionary) != nil {
             sizesFromDictionary(dictionary["Sizes"] as! NSDictionary)
         }
@@ -42,6 +44,7 @@ class Details: NSObject {
     init(ref: FIRDatabaseReference!, callback: () -> ()) {
         super.init()
         
+        // Load snapshot from the database
         ref.observeSingleEventOfType(.Value, withBlock: { snapshot in
             if !snapshot.exists() { return }
             
@@ -71,6 +74,7 @@ class Details: NSObject {
     private func sizesFromDictionary(dict: NSDictionary) -> Array<Int> {
         var array = Array<Int>()
 
+        // Loop through all of the sizes
         for name in Constants.Sizes.Names {
             array.append(sizesHelper(dict, name: name))
         }
@@ -78,6 +82,8 @@ class Details: NSObject {
         return array
     }
     
+    // Helper for the sizesFromDictionary method
+    // Adds the inventory count for a given size name
     private func sizesHelper(dict: NSDictionary, name: String) -> Int {
         if let temp = dict.valueForKey(name) as? String {
             return Int(temp) != nil ? Int(temp)! : 0
@@ -94,12 +100,13 @@ class Details: NSObject {
                 unconvertedKey as! String : "error"
             let typeKey: NSDictionary? = dictionary.objectForKey(unconvertedKey) as? NSDictionary
             
+            // Checks if the type subdictionary exists
             if typeKey != nil {
                 // Loop through each color that exists in this color type
                 for unconvertedName in typeKey!.allKeys {
                     let name: String = unconvertedName as? String != nil ?
                         unconvertedName as! String : "error"
-                    let nameKey: NSDictionary? = dictionary.objectForKey(unconvertedName) as? NSDictionary
+                    let nameKey: NSDictionary? = typeKey!.objectForKey(unconvertedName) as? NSDictionary
                     
                     // If color exists, create a new ColorInventory object
                     if nameKey != nil {
@@ -112,10 +119,11 @@ class Details: NSObject {
         }
     }
     
-    // Returns the colorinventory value with the given color name
+    // Returns the inventory count from a given color name
     func getInventoryOf(colorName: String) -> ColorInventory? {
         var inventory: ColorInventory? = nil
         
+        // Loops through all of the product color inventories
         for testInventory in colors {
             if (testInventory.colorName == colorName) {
                 inventory = testInventory
@@ -125,7 +133,9 @@ class Details: NSObject {
         return inventory
     }
     
+    // Returns the product description
     var productDescription: NSString! {
+        // Checks if the description does not exist
         if _description == nil {
             return ""
         }
@@ -134,7 +144,9 @@ class Details: NSObject {
         }
     }
     
+    // Returns the product type
     var type: NSString! {
+        // Checks if the type does not exist
         if _type == nil {
             _type = "Shirt"
         }
@@ -142,16 +154,18 @@ class Details: NSObject {
         return _type
     }
     
+    // Returns an array of the product's colors
     var colors: Array<ColorInventory> {
         return _colors
     }
     
+    // Returns na array of the product's sizes
     var sizes: Array<NSNumber> {
+        // Returns an all zero count if the size count is invalid
         if (_sizes.count != 5) {
             return [0, 0, 0, 0, 0]
         }
         
         return _sizes
     }
-
 }

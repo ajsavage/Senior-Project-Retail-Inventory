@@ -125,10 +125,12 @@ class AddNewColorViewController: Helper, barcodeScannerCommunicator {
         var sizes = Array<Int>()
         var barcodes = Array<String>()
         
+        // Loads existing sizes
         for size in inventoryCountFields {
             sizes.append(Int(size.text!)!)
         }
         
+        // Loads existing barcodes
         for barcode in BarcodeFields {
             barcodes.append(barcode.text!)
         }
@@ -159,6 +161,7 @@ class AddNewColorViewController: Helper, barcodeScannerCommunicator {
         alert.view.tintColor = currentColor
     }
     
+    // Cancels view
     @IBAction func cancelButtonPushed(sender: AnyObject) {
         navigationController?.popViewControllerAnimated(true)
     }
@@ -171,6 +174,7 @@ class AddNewColorViewController: Helper, barcodeScannerCommunicator {
         navigationController?.pushViewController(colorPicker, animated: true)
     }
     
+    // Lets user select a color type
     @IBAction func chooseColorTypeButtonPushed(sender: AnyObject) {
         let sheet = UIAlertController(title: "Choose Type", message: nil, preferredStyle: .ActionSheet)
         let cancel = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
@@ -249,11 +253,13 @@ class AddNewColorViewController: Helper, barcodeScannerCommunicator {
         let cancel = UIAlertAction(title: "No, Create New Color", style: .Cancel, handler: nil)
         var newButton: UIAlertAction? = nil
         
+        // Loads color options of given type from database
         dataRef!.child("colors").queryOrderedByChild("Type").queryEqualToValue(type)
             .observeEventType(.Value, withBlock: { snapshot in
         
             let dict = snapshot.value as? NSDictionary
             
+                // Checks if dictionary exists
             if (dict != nil) {
                 for unconvertedKey in dict!.allKeys {
                     let title: String = unconvertedKey as? String != nil ?
@@ -353,24 +359,29 @@ class AddNewColorViewController: Helper, barcodeScannerCommunicator {
         // Test input inventory count or barcode
         var isInventoryField = false
         
+        // Checks if the calling field is an inventory count field
         for field in inventoryCountFields {
             if textField == field {
                 isInventoryField = true
             }
         }
         
+        // Checks entered value for field type
         if isInventoryField {
             checkValues(textField, type: "Inventory Count")
         }
+        // Checks for barcode field type
         else {
             var isBarcodeField = false
             
+            // Checks if is barcode field
             for field in BarcodeFields {
                 if textField == field {
                     isBarcodeField = true
                 }
             }
             
+            // Checks if is a valid entered data
             if isBarcodeField {
                 let newBarcode = textField.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
                 
@@ -388,6 +399,7 @@ class AddNewColorViewController: Helper, barcodeScannerCommunicator {
     // Helper method for ensuring that the inventory count and the barcode 
     // fields are correctly filled out when the user is done editing them
     private func checkValues(textField: UITextField, type: String) {
+        // Checks if entered data exists
         if textField.text != nil {
             let newInventory: Int? = Int(textField.text!)
             
@@ -407,6 +419,7 @@ class AddNewColorViewController: Helper, barcodeScannerCommunicator {
         }
     }
 
+    // Overrides the viewDidLoad function
     override func viewDidLoad() {
         dismissTextFieldsByTapping()
         

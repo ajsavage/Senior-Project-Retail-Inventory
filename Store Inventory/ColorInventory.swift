@@ -18,6 +18,7 @@ class ColorInventory: NSObject {
     var barcodes: Array<String>
     var tag: Int
     
+    // Creates an empty color inventory
     override init() {
         _color = UIColor.blackColor()
         colorName = nil
@@ -27,6 +28,7 @@ class ColorInventory: NSObject {
         tag = -1
     }
     
+    // Creates a color inventory with no barcodes
     init(name: String, type: String, newSizes: Array<Int>) {
         _color = nil
         colorName = name
@@ -36,6 +38,7 @@ class ColorInventory: NSObject {
         tag = -1
     }
     
+    // Creates a color inventory with a tag number but no barcodes
     init(newColor: UIColor, name: String, type: String, newSizes: Array<Int>, newTag: Int) {
         _color = newColor
         colorName = name
@@ -45,6 +48,7 @@ class ColorInventory: NSObject {
         tag = newTag
     }
     
+    // Creates a color inventory with all data values provided by the caller
     init(newColor: UIColor, name: String, type: String, newSizes: Array<Int>, newBarcodes: Array<String>, newTag: Int) {
         _color = newColor
         colorName = name
@@ -71,6 +75,7 @@ class ColorInventory: NSObject {
     func addBarcodesToDatabase(dataRef: FIRDatabaseReference, productID: String) {
         var index = 0
         
+        // Loops through each size name
         for size in Constants.Sizes.Names {
             addBarcodesHelper(size, index: index, productID: productID, dataRef: dataRef)
             index += 1
@@ -81,6 +86,7 @@ class ColorInventory: NSObject {
     // Checks and adds a given barcode
     private func addBarcodesHelper(size: String, index: Int, productID: String,
                                    dataRef: FIRDatabaseReference) {
+        // Checks if this size's barcode exists
         if (barcodes[index] != "") {
             let ref = dataRef.child("barcodeIDs/\(barcodes[index])")
             ref.child("Color").setValue(colorName)
@@ -93,6 +99,7 @@ class ColorInventory: NSObject {
     func updateSize(size: String, count: Int) {
         let index = Constants.Sizes.Names.indexOf(size)
         
+        // Checks if the index is valid
         if index != nil {
             sizes[index!] = count
         }
@@ -100,13 +107,14 @@ class ColorInventory: NSObject {
     
     // Loads the RGB color info from the database
     func loadUIColor(dataRef: FIRDatabaseReference, callback: (color: UIColor?) -> ()) {
+        // Checks if the color exists
         if (colorName == nil) {
             callback(color: nil)
             return
         }
         
         // Access database for RGBA values
-        dataRef.child("colors/\(colorName)").observeSingleEventOfType(.Value, withBlock: { snapshot in
+        dataRef.child("colors/\(colorName!)").observeSingleEventOfType(.Value, withBlock: { snapshot in
             if !snapshot.exists() {
                 callback(color: nil)
                 return
@@ -120,6 +128,7 @@ class ColorInventory: NSObject {
         })
     }
     
+    // Returns the UIColor of the private color variable
     var color: UIColor? {
         return _color
     }

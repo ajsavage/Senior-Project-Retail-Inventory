@@ -57,10 +57,12 @@ class AddProductViewController: Helper, selectImageCommunicator {
         }
     }
     
+    // Cancels the view
     @IBAction func cancelButtonPushed(sender: AnyObject) {
         navigationController?.popViewControllerAnimated(true)
     }
     
+    // Saves the new product
     @IBAction func saveButtonPushed(sender: AnyObject) {
         showLoadingSymbol(loadingSymbolLabel)
         var temp: String
@@ -72,6 +74,7 @@ class AddProductViewController: Helper, selectImageCommunicator {
             return
         }
         
+        // Checks if the id exists
         temp = productIDField.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         if (temp == "") {
             showSaveErrorAlert("product ID")
@@ -84,6 +87,7 @@ class AddProductViewController: Helper, selectImageCommunicator {
         
         dictionary["ID"] = temp.uppercaseString
         
+        // Checks if the product already exists
         dataRef.child("inventory/\(temp)").observeEventType(.Value,
                      withBlock: { snapshot in
                 if snapshot.exists() {
@@ -261,6 +265,7 @@ class AddProductViewController: Helper, selectImageCommunicator {
             myImage = nil
         }
         
+        // Colors
         if (colorView.subviews.count == 0) {
             showErrorAlert("New Product Error", message: "Please add at least one color.")
             return
@@ -297,11 +302,13 @@ class AddProductViewController: Helper, selectImageCommunicator {
         return dict
     }
     
+    // Overrides the viewDidLoad function
     override func viewDidLoad() {
         super.viewDidLoad()
         dismissTextFieldsByTapping()
     }
     
+    // Show save error alert view
     func showSaveErrorAlert(message: String) {
         let errorAlert = UIAlertView(title: "New Product Error", message: "Please fill out the \(message) field.", delegate: self, cancelButtonTitle: "OK")
         indicator?.removeFromSuperview()
@@ -309,6 +316,7 @@ class AddProductViewController: Helper, selectImageCommunicator {
         errorAlert.show()
     }
     
+    // Show product id alert view
     func showProductIDErrorAlert() {
         let errorAlert = UIAlertView(title: "New Product Error", message: "Product IDs must be exactly \(Constants.ProductID.Length) characters long.", delegate: self, cancelButtonTitle: "OK")
         indicator?.removeFromSuperview()
@@ -335,6 +343,7 @@ class AddProductViewController: Helper, selectImageCommunicator {
         }
     }
     
+    // Prepares for this view to segue to a new view
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "addNewColorSegue",
             let destination = segue.destinationViewController as? AddNewColorViewController

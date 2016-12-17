@@ -30,6 +30,7 @@ class BarcodeScanner: UIViewController, AVCaptureMetadataOutputObjectsDelegate, 
         return false
     }
     
+    // Overrides the viewDidLoad function
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -89,6 +90,7 @@ class BarcodeScanner: UIViewController, AVCaptureMetadataOutputObjectsDelegate, 
         -> [CGPoint] {
         var translated : [CGPoint] = []
         
+        // Loops through each provided reference point
         for point in points {
             let dict = point as! NSDictionary
             let x = CGFloat((dict.objectForKey("X") as! NSNumber).floatValue)
@@ -143,6 +145,7 @@ class BarcodeScanner: UIViewController, AVCaptureMetadataOutputObjectsDelegate, 
         let eanCode = "\(trimmedCode)"
         var upcCode: String
         
+        // Checks if the barcode has an extra 0 at the front and so is an upcCode
         if (eanCode.hasPrefix("0") && eanCode.characters.count > 1) {
             upcCode = String(eanCode.characters.dropFirst())
             self.delegate?.backFromBarcodeScanner(upcCode, index: self.index)
@@ -154,6 +157,7 @@ class BarcodeScanner: UIViewController, AVCaptureMetadataOutputObjectsDelegate, 
     
     // Device was unable to scan/use the camera, show error notification
     func scanImpossible() {
+        // Lets the user know the scan was impossible
         let alert = UIAlertController(title: "Error: Cannot Scan", message: "This device does not have a camera or this app does not have access to the camera, please enter barcodes manually", preferredStyle: .Alert)
         let okButton = UIAlertAction(title: "OK", style: .Default) { action in
             self.delegate?.backFromBarcodeScanner(nil, index: 0)
@@ -162,9 +166,5 @@ class BarcodeScanner: UIViewController, AVCaptureMetadataOutputObjectsDelegate, 
         alert.addAction(okButton)
         self.presentViewController(alert, animated: true, completion: nil)
         session = nil
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
 }

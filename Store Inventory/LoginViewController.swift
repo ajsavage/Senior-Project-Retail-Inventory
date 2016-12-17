@@ -24,6 +24,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, UITextFieldDel
     // Loading Animation
     var indicator: UIActivityIndicatorView? = nil
    
+    // Checks if the entered user info is valid
     private func validLogin() -> Bool {
         email = usernameLabel.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         password = passwordLabel.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
@@ -42,6 +43,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, UITextFieldDel
         return shouldLogin
     }
     
+    // Shows a loading symbol in the given view
     func showLoadingSymbol(loadingView: UIView) {
         indicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
         loadingView.addSubview(indicator!)
@@ -49,9 +51,11 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, UITextFieldDel
         indicator!.startAnimating()
     }
     
+    // Attempts to login
     @IBAction func loginWithUsernameAndPassword(sender: UIButton) {
         showLoadingSymbol(view)
         
+        // Checks login data
         if validLogin() {
             FIRAuth.auth()?.signInWithEmail(email, password: password) { (user, error) in
                 if (error != nil) {
@@ -61,6 +65,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, UITextFieldDel
         }
     }
   
+    // Guest login
     @IBAction func loginAsGuest(sender: UIButton) {
         showLoadingSymbol(view)
         
@@ -71,10 +76,12 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, UITextFieldDel
         }
     }
 
+    // Sends a forgot password email
     @IBAction func handleForgottenPassword(sender: UIButton) {
         showForgotPasswordMessage("Enter your sign in email address and a password reset email will be sent to you shortly.")
     }
     
+    // Allows user to send the forgot password email
     func showForgotPasswordMessage(message: String) {
         let errorAlert = UIAlertView(title: "Forgotten Password", message: message, delegate: self, cancelButtonTitle: "OK")
         errorAlert.addButtonWithTitle("Cancel")
@@ -87,6 +94,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, UITextFieldDel
         errorAlert.show()
     }
     
+    // Handles alert view interactions
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         // Forgot password alert view
         if (alertView.tag == 2 && buttonIndex == 0) {
@@ -109,6 +117,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, UITextFieldDel
         }
     }
     
+    // Attempts to log in the user and load preferences
     private func loggingInUser(user: FIRUser) {
         // User account type
         var type: String? = "Customer"
@@ -144,10 +153,10 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, UITextFieldDel
                 
                 // Set NSUserDefaults
                 self.prefs.setObject(true, forKey: "ISLOGGEDIN")
-                self.prefs.setObject(type, forKey: "USERTYPE")
-                self.prefs.setObject(displayName, forKey: "USERNAME")
-                self.prefs.setObject(user.email, forKey: "USEREMAIL")
-                self.prefs.setObject(String(userID), forKey: "USERID")
+                self.prefs.setObject(type!, forKey: "USERTYPE")
+                self.prefs.setObject(displayName!, forKey: "USERNAME")
+                self.prefs.setObject(user.email!, forKey: "USEREMAIL")
+                self.prefs.setObject(String(UTF8String: userID)!, forKey: "USERID")
                 self.prefs.setObject(false, forKey: "ISGUESTUSER")
                 
                 self.indicator?.removeFromSuperview()
@@ -156,6 +165,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, UITextFieldDel
         }
     }
     
+    // Opens the correct home view
     private func goToHome(userType: String) {
         // Go to home screen
         switch userType {
@@ -171,12 +181,14 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, UITextFieldDel
         }
     }
 
+    // Shows a login error alert view
     private func loginError(message: String) {
         let errorAlert = UIAlertView(title: "Sign in Error", message: message, delegate: self, cancelButtonTitle: "OK")
         errorAlert.show()
         indicator?.removeFromSuperview()
     }
     
+    // Overrides the viewDidLoad function
     override func viewDidLoad() {
         super.viewDidLoad()
         

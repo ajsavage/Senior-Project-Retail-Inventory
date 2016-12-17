@@ -17,18 +17,24 @@ class StoreInfoViewController: UIViewController {
     // NSUserDefaults
     let prefs = NSUserDefaults.standardUserDefaults()
 
+    // Overrides the viewWillAppear function
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        usernameLabel.text = "Hi \(prefs.stringForKey("USERNAME"))! Welcome to"
         
+        let name: String! = prefs.stringForKey("USERNAME")!
+        usernameLabel.text = "Hi \(name)! Welcome to"
+        
+        // Loads the current store info from database
         FIRDatabase.database().reference().child("storeInfo").observeSingleEventOfType(
             .Value, withBlock: { snapshot in
             if snapshot.exists() {
-                if let temp = snapshot.valueForKey("Hours") as? String {
+                // Hours
+                if let temp = snapshot.childSnapshotForPath("Hours").value as? String {
                     self.hoursLabel.text = temp
                 }
                 
-                if let temp = snapshot.valueForKey("Name") as? String {
+                // Name
+                if let temp = snapshot.childSnapshotForPath("Name").value as? String {
                     self.storeNameLabel.text = temp
                 }
             }

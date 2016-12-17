@@ -52,6 +52,7 @@ class EditPagesViewController: ShowProductViewController, selectImageCommunicato
         }
     }
     
+    // Searches the given product ID
     @IBAction func searchFieldClicked(sender: AnyObject) {
         if (self.isBeingDismissed()) {
             showSearchAlert("You are being dismissed!")
@@ -62,6 +63,7 @@ class EditPagesViewController: ShowProductViewController, selectImageCommunicato
         else if (sender.text!.characters.count != Constants.ProductID.Length) {
             showSearchAlert("Not a valid Product ID - Product IDs must be exactly \(Constants.ProductID.Length) characters long.")
         }
+        // Can search the product ID value
         else {
             showLoadingSymbol(searchField)
             
@@ -71,6 +73,7 @@ class EditPagesViewController: ShowProductViewController, selectImageCommunicato
             let dataRef = FIRDatabase.database().reference().child("inventory")
             let productRef = dataRef.child(capitalID)
             
+            // Loads the product from database
             productRef.observeSingleEventOfType(.Value, withBlock: { snapshot in
                 if !snapshot.exists() {
                     self.showSearchAlert("Product ID# " + capitalID + " does not currently exist in the database.")
@@ -179,12 +182,14 @@ class EditPagesViewController: ShowProductViewController, selectImageCommunicato
         colorScrollView.addSubview(colorSwatch)
     }
  
+    // Saves the updated product info
     @IBAction func saveButtonClicked(sender: AnyObject) {
         showLoadingSymbol(overallScrollView)
         
         currentProduct.selfRef.child("Title").setValue(titleLabel.text)
         currentProduct.selfRef.child("Description").setValue(descriptionLabel.text)
 
+        // Price
         let price = Float(priceLabel.text!)
         if (price != nil) {
             currentProduct.selfRef.child("Price").setValue(price)
@@ -207,10 +212,12 @@ class EditPagesViewController: ShowProductViewController, selectImageCommunicato
         removeLoadingSymbol(overallScrollView)
     }
     
+    // Cancels view
     @IBAction func cancelButtonClicked(sender: AnyObject) {
         navigationController?.popViewControllerAnimated(true)
     }
     
+    // Overrides the viewDidLoad function
     override func viewDidLoad() {
         super.viewDidLoad()
         dismissTextFieldsByTapping()

@@ -19,6 +19,7 @@ class ShowProductViewController: Helper, UIActionSheetDelegate, UIAlertViewDeleg
     var cancelSizeIndex = 0
     var typeName = ""
     
+    // Creates a color action sheet to display
     func createCustomerColorMenu() -> UIActionSheet {
         let sheet: UIActionSheet = UIActionSheet(title: "Choose Color",
                                                  delegate: self,
@@ -43,6 +44,7 @@ class ShowProductViewController: Helper, UIActionSheetDelegate, UIAlertViewDeleg
         sheet.cancelButtonIndex = cancelColorIndex
     }
     
+    // Creates a size action sheet to display
     var createSizeMenu: UIActionSheet {
         let sheet: UIActionSheet = UIActionSheet(title: "Choose Size",
                                                  delegate: self,
@@ -63,6 +65,7 @@ class ShowProductViewController: Helper, UIActionSheetDelegate, UIAlertViewDeleg
         return sheet
     }
     
+    // Creates a type action sheet to display
     var createTypeMenu: UIActionSheet {
         let sheet: UIActionSheet = UIActionSheet(title: "Choose Type",
                                                  delegate: self,
@@ -88,6 +91,7 @@ class ShowProductViewController: Helper, UIActionSheetDelegate, UIAlertViewDeleg
         cancelSizeIndex += 1
     }
     
+    // Handles the action sheet interactions
     func actionSheetButtonClicked(actionSheet: UIActionSheet, buttonIndex: Int, view: UILabel) {
         // Size ActionSheet
         if (actionSheet.tag == Constants.Sizes.MenuTag) {
@@ -129,7 +133,17 @@ class ShowProductViewController: Helper, UIActionSheetDelegate, UIAlertViewDeleg
         }
         // User selected a color
         else {
-            
+            let colorInventory: ColorInventory = currentProduct.colors[colorIndex]
+          
+            // Calculates all sizes
+            if (sizeIndex == -1) {
+                for index in 0 ..< Constants.Sizes.Names.count {
+                    stock += colorInventory.sizes[index]
+                }
+            }
+            else {
+                stock = colorInventory.sizes[sizeIndex]
+            }
         }
         
         return "In Stock: " + String(stock)
